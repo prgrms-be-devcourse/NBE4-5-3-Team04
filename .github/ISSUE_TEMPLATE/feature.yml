@@ -1,0 +1,43 @@
+name: "[FEAT] 기능 추가"
+about: "새로운 기능을 추가하는 경우 사용"
+title: "[FEAT] 기능 요약 (예: 로그인 버튼 추가)"
+labels: ["feature"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎯 기능 목적
+        > 이 기능이 필요한 이유를 설명해주세요.
+
+  - type: input
+    id: feature_goal
+    attributes:
+      label: "✅ 기능 목표"
+      description: "추가할 기능의 목적을 간략히 설명"
+      placeholder: "예: 사용자가 공구 대여 시 실시간 재고 확인 기능 필요"
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature_tasks
+    attributes:
+      label: "📌 작업 내용 (Tasks)"
+      description: "이 기능을 구현하기 위해 수행해야 할 작업을 나열해주세요."
+      placeholder: |
+        - [ ] 백엔드: 재고 상태 조회 API 개발
+        - [ ] 프론트엔드: 재고 표시 UI 구현
+        - [ ] 테스트 코드 작성
+      value: |
+        - [ ] 작업 1
+        - [ ] 작업 2
+        - [ ] 작업 3
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: "💡 추가 정보"
+      description: "추가적으로 공유하고 싶은 내용이 있다면 작성해주세요."

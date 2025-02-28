@@ -1,0 +1,57 @@
+name: "[BUG] 버그 수정"
+about: "버그 수정이 필요한 경우 사용"
+title: "[BUG] 발생한 문제 요약 (예: 로그인 시 500 오류 발생)"
+labels: ["bug"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🐞 버그 설명
+        > 어떤 버그가 발생했는지 설명해주세요.
+
+  - type: input
+    id: bug_summary
+    attributes:
+      label: "🐛 버그 요약"
+      description: "버그를 한 줄로 요약해주세요."
+      placeholder: "예: 로그인 버튼을 눌렀을 때 500 에러 발생"
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug_steps
+    attributes:
+      label: "⚡ 재현 방법 (Steps to Reproduce)"
+      description: "버그를 재현하는 방법을 단계별로 작성해주세요."
+      placeholder: |
+        1. 로그인 페이지로 이동
+        2. 아이디와 비밀번호 입력 후 로그인 버튼 클릭
+        3. 500 에러 발생
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_result
+    attributes:
+      label: "✅ 기대 결과"
+      description: "정상적으로 동작해야 하는 결과를 설명해주세요."
+      placeholder: "예: 로그인 성공 후 대시보드 페이지로 이동해야 함"
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_result
+    attributes:
+      label: "🚨 실제 결과"
+      description: "실제 발생한 결과를 작성해주세요."
+      placeholder: "예: 500 Internal Server Error 발생"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: "💡 추가 정보"
+      description: "기타 참고할 사항이나 로그 정보를 첨부해주세요."
