@@ -1,4 +1,5 @@
 name: "[REFACTOR] 코드 리팩토링"
+description: "코드 개선이 필요한 경우 작성하는 템플릿입니다."
 title: "[REFACTOR] 리팩토링 대상 (예: UserService 코드 개선)"
 labels: ["refactor"]
 assignees: []
