@@ -9,7 +9,7 @@ body:
     attributes:
       value: "## 🐞 버그 설명\n어떤 버그가 발생했는지 설명해주세요."
 
-  - type: input
+  - type: textarea
     id: bug_summary
     attributes:
       label: "🐛 버그 요약"

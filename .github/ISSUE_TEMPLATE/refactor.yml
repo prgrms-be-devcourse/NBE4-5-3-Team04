@@ -11,7 +11,7 @@ body:
         ## 🔧 리팩토링 개요
         코드 개선이 필요한 이유를 설명해주세요.
 
-  - type: input
+  - type: textarea
     id: refactor_goal
     attributes:
       label: "🎯 리팩토링 목표"
