@@ -14,7 +14,7 @@ function decodeJWT(token: string) {
 }
 
 // 쿠키에서 Access Token 가져오기
-export function getAccessTokenFromCookie() {
+export function getAccessTokenFromCookie(): string | null {
   return (
     document.cookie
       .split("; ")
@@ -23,13 +23,13 @@ export function getAccessTokenFromCookie() {
   );
 }
 
-// Access Token에서 id 추출하기
-export function getUserIdFromToken() {
-  const token = getAccessToken(); // getAccessToken()을 사용하여 안전하게 가져옴
+// Access Token에서 id 추출하기 (쿠키 기반)
+export function getUserIdFromToken(): string | null {
+  const token = getAccessTokenFromCookie(); // 쿠키에서 가져오기
   if (!token) return null;
 
   const payload = decodeJWT(token);
-  return payload?.id || null; // id가 JWT payload에 있는 경우 반환
+  return payload?.id || null; // JWT payload에 있는 id 반환
 }
 
 // Access Token을 sessionStorage에 저장
