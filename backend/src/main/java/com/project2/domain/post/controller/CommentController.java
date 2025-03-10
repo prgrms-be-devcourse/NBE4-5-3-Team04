@@ -2,7 +2,6 @@ package com.project2.domain.post.controller;
 
 import com.project2.domain.post.dto.comment.CommentRequestDTO;
 import com.project2.domain.post.dto.comment.CommentResponseDTO;
-import com.project2.domain.post.dto.comment.ListCommentResponseDTO;
 import com.project2.domain.post.service.CommentService;
 import com.project2.global.dto.Empty;
 import com.project2.global.dto.RsData;
@@ -23,7 +22,7 @@ public class CommentController {
     }
 
     @GetMapping("/posts/{postId}/comments")
-    public RsData<List<ListCommentResponseDTO>> getComments(@PathVariable Long postId) {
+    public RsData<List<CommentResponseDTO>> getComments(@PathVariable Long postId) {
         return commentService.getComments(postId);
     }
 
