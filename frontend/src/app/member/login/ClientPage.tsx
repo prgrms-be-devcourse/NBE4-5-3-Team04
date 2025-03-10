@@ -1,5 +1,6 @@
 "use client";
 
+import { client } from "@/lib/backend/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAccessToken } from "@/app/utils/auth";
