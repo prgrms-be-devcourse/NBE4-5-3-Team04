@@ -6,6 +6,9 @@ import com.project2.domain.member.dto.FollowerResponseDto;
 import com.project2.domain.member.service.FollowService;
 import com.project2.domain.member.service.FollowerService;
 import com.project2.domain.member.service.FollowingService;
+
+import com.project2.domain.post.dto.PostResponseDTO;
+
 import com.project2.domain.post.entity.Post;
 import com.project2.domain.post.service.PostService;
 import com.project2.global.dto.RsData;
@@ -112,6 +115,7 @@ public class FollowController {
         }
     }
 
+
     @GetMapping("/{memberId}/following-posts")
     public Page<Post> getFollowingPosts(
             @PathVariable Long memberId,
@@ -120,5 +124,6 @@ public class FollowController {
         // memberId를 사용하여 PostService의 메서드를 호출
 
         return postService.getFollowingPosts(pageable);
+
     }
 }
