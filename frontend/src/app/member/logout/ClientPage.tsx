@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { removeAccessToken } from "@/app/utils/auth";
-import client from "@/lib/backend/client";
+import { client } from "@/lib/backend/client";
 
 export default function LogoutPage() {
   const router = useRouter();

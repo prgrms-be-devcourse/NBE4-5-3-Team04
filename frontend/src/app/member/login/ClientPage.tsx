@@ -1,16 +1,16 @@
 "use client";
 
-import { client } from "@/lib/backend/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getAccessToken } from "@/app/utils/auth";
+import { getAccessTokenFromCookie } from "@/app/utils/auth";
 
 export default function ClientPage() {
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
-    const token = getAccessToken();
+    const token = getAccessTokenFromCookie();
+
     if (token) {
       router.push("/");
     } else {

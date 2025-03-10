@@ -14,4 +14,3 @@ export const clientFormData = createClient<paths>({
     "Content-Type": "multipart/form-data",
   },
 });
-
