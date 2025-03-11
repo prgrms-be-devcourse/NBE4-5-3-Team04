@@ -1,10 +1,11 @@
 package com.project2.global.util;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import org.springframework.stereotype.Service;
 
@@ -28,17 +29,12 @@ public class ImageService {
 			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 			connection.setRequestProperty("Referer", "https://www.naver.com");
 
-			try (InputStream inputStream = connection.getInputStream();
-				 FileOutputStream outputStream = new FileOutputStream(savePath)) {
+			try (InputStream inputStream = connection.getInputStream()) {
 
 				File file = new File(savePath);
-				file.getParentFile().mkdirs();
+				file.getParentFile().mkdirs(); // 폴더가 없으면 생성
+				Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-				byte[] buffer = new byte[8192];
-				int bytesRead;
-				while ((bytesRead = inputStream.read(buffer)) != -1) {
-					outputStream.write(buffer, 0, bytesRead);
-				}
 			} finally {
 				connection.disconnect();
 			}
