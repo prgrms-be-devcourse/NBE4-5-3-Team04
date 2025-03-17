@@ -82,9 +82,9 @@ SNS 와 여행을 결합한 프로젝트 **Pathy**
 
 ![ERD](https://github.com/user-attachments/assets/3fa78a26-706e-4af1-85ba-d2c884efd5fd)
 
-### 🔗 요구사항 정의서
+### 🔗 기획서
 
-📜 [요구사항 정의서](https://www.notion.so/1a73550b7b55803fa23ad52c9928777e)
+📜 [기획서](https://www.notion.so/1a73550b7b55803fa23ad52c9928777e)
 
 ### 🔗 API 명세서
 
