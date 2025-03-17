@@ -32,7 +32,7 @@ public class PostDetailResponseDTO {
 		this.content = post.getContent();
 		this.likeCount = post.getLikes().size();
 		this.scrapCount = post.getScraps().size();
-		this.imageUrls = post.getImages().stream().map(PostImage::getImageUrl).toList();
+		this.imageUrls = post.getImages().stream().map(PostImage::getImageUrl).sorted().toList();
 		this.isLiked = post.getLikes().stream().anyMatch(like -> like.getMember().getId().equals(actor.getId()));
 		this.isScrapped = post.getScraps().stream().anyMatch(scrap -> scrap.getMember().getId().equals(actor.getId()));
 		this.createdDate = post.getCreatedDate();
