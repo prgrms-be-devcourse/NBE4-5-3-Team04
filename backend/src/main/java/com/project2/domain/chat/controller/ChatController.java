@@ -52,7 +52,7 @@ public class ChatController {
 		@RequestParam(defaultValue = "0") int offset,
 		@RequestParam(defaultValue = "10") int size) {
 
-		Pageable pageable = PageRequest.of(offset / size, size, Sort.by("createdDate").descending());
+		Pageable pageable = PageRequest.of(offset / size, size, Sort.by("createdDate").ascending());
 		return new RsData<>("200", "성공", chatService.getChatMessages(roomId, pageable));
 	}
 
