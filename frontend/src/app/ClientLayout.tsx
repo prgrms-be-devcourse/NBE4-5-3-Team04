@@ -167,12 +167,6 @@ export default function ClientLayout({
               >
                 팔로잉 게시물
               </Link>
-              <Link
-                href="/posts/liked"
-                className="block hover:bg-gray-400 p-2 rounded"
-              >
-                장소 게시물
-              </Link>
             </nav>
           </aside>
           <main className="flex-1 bg-white p-4 pt-16 ml-48">{children}</main>
