@@ -98,4 +98,4 @@ SNS 와 여행을 결합한 프로젝트 **Pathy**
 
 🔗 [서비스 URL](https://pahtymytravelpathy.duckdns.org/)
 
-⚠ 주의사항 현재 Naver와 Google에 배포 요청이 승인되지 않은 상태로, 테스트 ID를 요청하셔야 사용 가능합니다.
+⚠ 주의사항 현재 Naver에 배포 요청이 승인되지 않은 상태로, 테스트 ID를 요청하셔야 사용 가능합니다.
