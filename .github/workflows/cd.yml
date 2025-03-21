@@ -17,13 +17,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # 기존 프로세스 정리
-            # 기존 프로세스는 종료하되 오류 메시지 출력하지 않기
-            pkill -f 'project2-0.0.1-SNAPSHOT.jar' > /dev/null 2>&1 || true
-            pkill -f 'npm start' > /dev/null 2>&1 || true
-            
-            sleep 2
-
             # 기존 tmux 세션 종료
             tmux kill-session -t deploy_session || true
             sleep 2
