@@ -7,7 +7,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Process Check Only
+      - name: Process Cleanup
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -15,7 +15,27 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            echo "===== 프로세스 확인 ====="
-            # 프로세스 확인만 수행
-            ps aux
-            echo "프로세스 확인 완료"
+            echo "===== 프로세스 정리 ====="
+            # 먼저 자바 프로세스 확인
+            echo "자바 프로세스 확인:"
+            ps aux | grep 'java -jar' | grep -v grep
+            # 자바 프로세스 정리 시도
+            if pgrep -f 'java -jar' > /dev/null; then
+              echo "자바 프로세스 종료 시도..."
+              pkill -f 'java -jar' || echo "자바 프로세스 종료 실패"
+            else
+              echo "실행 중인 자바 프로세스 없음"
+            fi
+            
+            # npm 프로세스 확인
+            echo "npm 프로세스 확인:"
+            ps aux | grep 'npm start' | grep -v grep
+            # npm 프로세스 정리 시도
+            if pgrep -f 'npm start' > /dev/null; then
+              echo "npm 프로세스 종료 시도..."
+              pkill -f 'npm start' || echo "npm 프로세스 종료 실패"
+            else
+              echo "실행 중인 npm 프로세스 없음"
+            fi
+            
+            echo "프로세스 정리 완료 또는 시도 완료"
