@@ -7,7 +7,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to EC2 - Step 1
+      - name: Basic Command Test
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -15,10 +15,11 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            echo "===== 단계 1: 프로세스 정리 ====="
-            # 현재 실행 중인 프로세스 확인
-            ps aux | grep 'java\|npm'
-            # 기존 프로세스 정리 (조심스럽게 진행)
-            pkill -f 'java -jar' || echo "자바 프로세스가 실행 중이지 않습니다"
-            pkill -f 'npm start' || echo "npm 프로세스가 실행 중이지 않습니다"
-            echo "프로세스 정리 완료"
+            echo "===== 기본 명령어 테스트 ====="
+            # 간단한 명령어만 실행
+            echo "현재 디렉토리: $(pwd)"
+            echo "사용자: $(whoami)"
+            echo "날짜: $(date)"
+            # 디렉토리 확인
+            ls -la /home/ec2-user/
+            echo "테스트 완료"
