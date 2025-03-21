@@ -18,14 +18,9 @@ jobs:
           port: 22
           script: |
             # 기존 프로세스 정리
-            # 디버깅 정보 출력
-            echo "현재 실행 중인 프로세스:"
-            ps aux | grep java
-            ps aux | grep npm
-            
-            # pkill 명령 실행 및 반환 코드 확인
-            pkill -f 'java -jar build/libs/project2-0.0.1-SNAPSHOT.jar' || echo "Java 프로세스 종료 반환 코드: $?"
-            pkill -f 'npm start' || echo "NPM 프로세스 종료 반환 코드: $?"
+            # 기존 프로세스는 종료하되 오류 메시지 출력하지 않기
+            pkill -f 'project2-0.0.1-SNAPSHOT.jar' > /dev/null 2>&1 || true
+            pkill -f 'npm start' > /dev/null 2>&1 || true
             
             sleep 2
 
