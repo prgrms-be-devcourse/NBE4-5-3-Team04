@@ -7,7 +7,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Basic Command Test
+      - name: Process Check Only
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -15,11 +15,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            echo "===== 기본 명령어 테스트 ====="
-            # 간단한 명령어만 실행
-            echo "현재 디렉토리: $(pwd)"
-            echo "사용자: $(whoami)"
-            echo "날짜: $(date)"
-            # 디렉토리 확인
-            ls -la /home/ec2-user/
-            echo "테스트 완료"
+            echo "===== 프로세스 확인 ====="
+            # 프로세스 확인만 수행
+            ps aux
+            echo "프로세스 확인 완료"
