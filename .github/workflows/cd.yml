@@ -1,47 +1,18 @@
-name: CD  
+name: Test SSH Connection
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 jobs:
-  deploy:
+  test-connection:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to EC2
+      - name: SSH Connection Test
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ec2-user
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          script_stop: true
-          command_timeout: 30m  # 명령어 타임아웃 증가
           script: |
-            echo "===== 배포 시작 ====="
-            # 기존 프로세스 정리
-            echo "프로세스 정리 중..."
-            pkill -f 'java -jar build/libs/project2-0.0.1-SNAPSHOT.jar' || true
-            pkill -f 'npm start' || true
-            
-            # 저장소 디렉토리로 이동 및 git pull
-            echo "Git pull 실행 중..."
-            cd /home/ec2-user/NBE4-5-2-Team04
-            git pull origin main
-            
-            # Backend 빌드 및 실행
-            echo "백엔드 빌드 및 실행 중..."
-            cd /home/ec2-user/NBE4-5-2-Team04/backend
-            ./gradlew build -x test -Dorg.gradle.jvmargs="-Xmx256m"
-            
-            # 백엔드 애플리케이션 실행
-            echo "백엔드 애플리케이션 실행 중..."
-            nohup java -Xms64m -Xmx128m -jar build/libs/project2-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
-            
-            # Frontend 빌드 및 실행
-            echo "프론트엔드 빌드 및 실행 중..."
-            cd /home/ec2-user/NBE4-5-2-Team04/frontend
-            npm install
-            npm run build
-            nohup npm start > /dev/null 2>&1 &
-            
-            echo "===== 배포 완료 ====="
+            echo "SSH 연결 성공!"
+            whoami
+            pwd
