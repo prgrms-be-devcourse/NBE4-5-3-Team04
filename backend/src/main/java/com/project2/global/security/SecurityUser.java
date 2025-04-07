@@ -14,7 +14,7 @@ import lombok.Getter;
 public class SecurityUser extends User implements OAuth2User {
 
 	@Getter
-	private long id;
+	public long id;
 
 	public SecurityUser(long id, String email, Collection<? extends GrantedAuthority> authorities) {
 		super(email, "", authorities);

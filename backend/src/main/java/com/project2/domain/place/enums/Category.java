@@ -11,14 +11,13 @@ public enum Category {
 		"은행"), CT1("문화시설"), AG2("중개업소"), PO3("공공기관"), AT4("관광명소"), AD5("숙박"), FD6("음식점"), CE7("카페"), HP8("병원"), PM9(
 		"약국"), ETC("기타");
 
-	// 카테고리 한글명을 받아 코드로 변환 해주주는 부분.
-	private final String krCategory;
+	public static final Map<String, Category> CATEGORY_MAP = new HashMap<>();
 
 	Category(String krCategory) {
 		this.krCategory = krCategory;
 	}
-
-	private static final Map<String, Category> CATEGORY_MAP = new HashMap<>();
+	// 카테고리 한글명을 받아 코드로 변환 해주주는 부분.
+	public final String krCategory;
 
 	static {
 		for (Category category : Category.values()) {
