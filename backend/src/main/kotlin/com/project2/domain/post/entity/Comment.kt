@@ -30,9 +30,6 @@ class Comment : BaseTime() {
     @JoinColumn(name = "parent_comment_id")
     var parent: Comment? = null
 
-    @OneToMany(mappedBy = "parent", cascade = [CascadeType.REMOVE], orphanRemoval = true)
-    var children: MutableList<Comment> = mutableListOf()
-
     fun updateContent(newContent: String) {
         if (newContent.isBlank()) {
             throw ServiceException("400", "댓글 내용은 비어 있을 수 없습니다.")
