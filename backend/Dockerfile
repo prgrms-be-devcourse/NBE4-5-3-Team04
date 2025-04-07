@@ -8,7 +8,7 @@ RUN yum install -y findutils
 # Gradle Wrapper 및 설정 파일 복사
 COPY gradlew gradlew.bat ./
 COPY gradle gradle
-COPY build.gradle settings.gradle ./
+COPY build.gradle.kts settings.gradle ./
 
 # Gradle 의존성 다운로드
 RUN ./gradlew dependencies --no-daemon
@@ -52,7 +52,7 @@ ENTRYPOINT ["java", "-Xms64m", "-Xmx128m", "-jar", "app.jar"]
 # # Gradle Wrapper 및 설정 파일 복사
 # COPY gradlew gradlew.bat ./  
 # COPY gradle gradle
-# COPY build.gradle settings.gradle ./
+# COPY build.gradle.kts.kts settings.gradle ./
 
 # # Gradle 의존성 다운로드 (캐싱 최적화)
 # RUN ./gradlew dependencies --no-daemon
