@@ -2,8 +2,6 @@ package com.project2.domain.member.entity
 
 import com.project2.global.entity.BaseTime
 import jakarta.persistence.*
-import lombok.AllArgsConstructor
-import lombok.Getter
 import lombok.NoArgsConstructor
 
 

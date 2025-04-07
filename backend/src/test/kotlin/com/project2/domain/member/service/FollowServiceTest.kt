@@ -22,20 +22,20 @@ import java.util.*
 @ExtendWith(MockitoExtension::class)
 class FollowServiceTest {
     @Mock
-    private val followRepository: FollowRepository? = null
+    private lateinit var followRepository: FollowRepository
 
     @Mock
-    private val memberRepository: MemberRepository? = null
+    private lateinit var memberRepository: MemberRepository
 
     @Mock
-    private val rq: Rq? = null
+    private lateinit var rq: Rq
 
     @InjectMocks
-    private val followService: FollowService? = null
+    private lateinit var followService: FollowService
 
-    private var follower: Member? = null
-    private var following: Member? = null
-    private var requestDto: FollowRequestDto? = null
+    private lateinit var follower: Member
+    private lateinit var following: Member
+    private lateinit var requestDto: FollowRequestDto
 
     @BeforeEach
     fun setUp() {
@@ -63,8 +63,7 @@ class FollowServiceTest {
                 memberRepository!!.findById(
                     it
                 )
-            }
-        ).thenReturn(Optional.of(following!!)) // following.getId() 사용
+            }).thenReturn(Optional.of(following!!)) // following.getId() 사용
 //        Mockito.`when`(followRepository!!.findByFollowerAndFollowing(follower, following)).thenReturn(Optional.empty())
         val savedFollow = Follows(1L, follower, following)
         Mockito.`when`(followRepository?.save(ArgumentMatchers.any(Follows::class.java))).thenReturn(savedFollow)
@@ -93,8 +92,7 @@ class FollowServiceTest {
                 memberRepository!!.findById(
                     it
                 )
-            }
-        ).thenReturn(Optional.of(following!!))
+            }).thenReturn(Optional.of(following!!))
 
         //   - 팔로우 관계가 이미 존재하는 경우 설정
         val existingFollow = Follows(1L, follower, following)

@@ -37,8 +37,8 @@ class FollowerResponseDto(
 ) {
     constructor(member: Member) : this(
         id = member.id!!,
-        email = member.email!!,
-        nickname = member.nickname!!,
+        email = member.email,
+        nickname = member.nickname,
         profileImageUrl = member.profileImageUrl!!,
         totalPages = 0
     )

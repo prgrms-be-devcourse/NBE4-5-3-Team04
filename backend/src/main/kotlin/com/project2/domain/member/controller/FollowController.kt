@@ -30,17 +30,15 @@ class FollowController {
 
     @PostMapping("/{memberid}/follows")
     fun toggleFollow(
-        @PathVariable memberid: Long?,
-        @RequestBody requestDto: FollowRequestDto
+        @PathVariable memberid: Long?, @RequestBody requestDto: FollowRequestDto
     ): RsData<FollowResponseDto> {
-        requestDto.followerId=memberid
+        requestDto.followerId = memberid
         return followService!!.toggleFollow(requestDto)
     }
 
     @GetMapping("/{memberId}/followers")
     fun getFollowers(
-        @PathVariable memberId: Long?,
-        @PageableDefault(size = 8) pageable: Pageable?
+        @PathVariable memberId: Long?, @PageableDefault(size = 8) pageable: Pageable?
     ): ResponseEntity<RsData<Page<FollowerResponseDto>>> {
 //		try {
         val followers = memberId?.let { followerService!!.getFollowers(it, pageable) }!!
@@ -51,14 +49,12 @@ class FollowController {
             }
         }
 
-        println("가져온 팔로워 페이지 수: " + followers?.totalPages)
-        println("가져온 팔로워 명 수: " + followers?.totalElements)
+        println("가져온 팔로워 페이지 수: " + followers.totalPages)
+        println("가져온 팔로워 명 수: " + followers.totalElements)
 
         return ResponseEntity.ok(
             RsData(
-                "200",
-                "팔로워 목록이 성공적으로 조회되었습니다.",
-                followers
+                "200", "팔로워 목록이 성공적으로 조회되었습니다.", followers
             )
         )
         //		} catch (ServiceException e) {
@@ -72,15 +68,13 @@ class FollowController {
             var followings = followingService!!.getFollowings(memberId!!)
 
             // Check if the list of followings is empty
-            if (followings!!.isEmpty()) {
+            if (followings.isEmpty()) {
                 return ResponseEntity.noContent().build()
             }
 
             return ResponseEntity.ok(
                 RsData(
-                    "200",
-                    "팔로잉 목록이 성공적으로 조회되었습니다.",
-                    followings
+                    "200", "팔로잉 목록이 성공적으로 조회되었습니다.", followings
                 )
             )
         } catch (e: ServiceException) {
@@ -90,12 +84,10 @@ class FollowController {
 
     @GetMapping("/{memberId}/following-posts")
     fun getFollowingPosts(
-        @AuthenticationPrincipal actor: SecurityUser,
-        @PathVariable memberId: Long?,
-        pageable: Pageable?
+        @AuthenticationPrincipal actor: SecurityUser, @PathVariable memberId: Long?, pageable: Pageable?
     ): Page<Post>? {
         // memberId를 사용하여 PostService의 메서드를 호출
 
-        return pageable?.let { postService!!.getFollowingPosts(actor, it!!) }
+        return pageable?.let { postService!!.getFollowingPosts(actor, it) }
     }
 }

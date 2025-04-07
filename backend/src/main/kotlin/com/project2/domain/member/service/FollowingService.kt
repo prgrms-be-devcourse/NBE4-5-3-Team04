@@ -13,28 +13,24 @@ import java.util.stream.Collectors
 
 @Service
 @RequiredArgsConstructor
-class FollowingService {
-    private val followRepository: FollowRepository? = null
-    private val memberService: MemberService? = null
-    private val rq: Rq? = null
-
-    fun getFollowings(memberId: Long): List<FollowerResponseDto> {
+class FollowingService(
+    private val followRepository: FollowRepository, private val memberService: MemberService, private val rq: Rq?
+) {
+    fun getFollowings(memberId: Long): MutableList<FollowerResponseDto> {
         val actor = rq!!.actor
 
-        //		System.out.println("aaaaaaaaactor = " + actor.getId()+" "+actor.getEmail());
         if (actor.id != memberId) {
             throw ServiceException("403", "자신의 팔로잉 목록만 볼 수 있습니다.")
         }
-        val member = memberService!!.findByIdOrThrow(memberId)
-        val followsList = followRepository!!.findByFollower(member)
+        val member = memberService.findByIdOrThrow(memberId)
+        val followsList = followRepository.findByFollower(member)?: emptyList()
 
-        return followsList!!.stream()
-            .map { follow: Follows? -> FollowerResponseDto(follow!!.following!!) }
+        return followsList!!.stream().map { follow: Follows? -> FollowerResponseDto(follow!!.following!!) }
             .collect(Collectors.toList())
     }
 
     @Transactional(readOnly = true)
     fun getFollowingsCount(member: Member?): Long {
-        return followRepository!!.countByFollower(member)
+        return followRepository.countByFollower(member)
     }
 }

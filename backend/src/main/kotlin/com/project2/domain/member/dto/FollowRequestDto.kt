@@ -9,13 +9,7 @@ import lombok.Setter
 @NoArgsConstructor
 class FollowRequestDto {
     var followerId: Long? = null
-        set(value) {
-            field = value
-        }
     var followingId: Long? = null
-        set(value) {
-            field = value
-        }
 
 //    public FollowRequestDto(Follows follows) {
     //
