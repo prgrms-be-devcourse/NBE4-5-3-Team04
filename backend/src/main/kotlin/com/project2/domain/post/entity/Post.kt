@@ -36,10 +36,49 @@ class Post() : BaseTime() {
 
     @ManyToOne
     @JoinColumn(name = "place_id", referencedColumnName = "id")
-    var place: Place? = null
+    lateinit var place: Place
 
     fun update(title: String, content: String) {
         this.title = title
         this.content = content
+    }
+
+    companion object {
+        @JvmStatic
+        fun builder() = PostBuilder()
+    }
+
+    class PostBuilder {
+        private var id: Long? = null
+        private var content: String = ""
+        private var title: String = ""
+        private lateinit var member: Member
+        private var images: MutableSet<PostImage> = mutableSetOf()
+        private var likes: MutableSet<Likes> = mutableSetOf()
+        private var scraps: MutableSet<Scrap> = mutableSetOf()
+        private var comments: MutableSet<Comment> = mutableSetOf()
+        private lateinit var place: Place
+
+        fun id(id: Long?) = apply { this.id = id }
+        fun content(content: String) = apply { this.content = content }
+        fun title(title: String) = apply { this.title = title }
+        fun member(member: Member) = apply { this.member = member }
+        fun images(images: MutableSet<PostImage>) = apply { this.images = images }
+        fun likes(likes: MutableSet<Likes>) = apply { this.likes = likes }
+        fun scraps(scraps: MutableSet<Scrap>) = apply { this.scraps = scraps }
+        fun comments(comments: MutableSet<Comment>) = apply { this.comments = comments }
+        fun place(place: Place) = apply { this.place = place }
+
+        fun build() = Post().apply {
+            this.id = this@PostBuilder.id
+            this.content = this@PostBuilder.content
+            this.title = this@PostBuilder.title
+            this.member = this@PostBuilder.member
+            this.images = this@PostBuilder.images
+            this.likes = this@PostBuilder.likes
+            this.scraps = this@PostBuilder.scraps
+            this.comments = this@PostBuilder.comments
+            this.place = this@PostBuilder.place
+        }
     }
 }
