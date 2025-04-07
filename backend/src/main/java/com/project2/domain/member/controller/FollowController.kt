@@ -93,9 +93,9 @@ class FollowController {
         @AuthenticationPrincipal actor: SecurityUser,
         @PathVariable memberId: Long?,
         pageable: Pageable?
-    ): Page<Post> {
+    ): Page<Post>? {
         // memberId를 사용하여 PostService의 메서드를 호출
 
-        return postService!!.getFollowingPosts(actor, pageable)
+        return pageable?.let { postService!!.getFollowingPosts(actor, it!!) }
     }
 }
