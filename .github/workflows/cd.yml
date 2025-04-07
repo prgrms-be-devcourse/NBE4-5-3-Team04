@@ -1,4 +1,4 @@
-name: CD  
+name: CD
 
 on:
   push:
@@ -37,12 +37,12 @@ jobs:
             echo "🔄 Backend 빌드 및 실행 중..."
             tmux send-keys "cd ${REPO_DIR}/backend" C-m
             tmux send-keys "./gradlew build -x test -Dorg.gradle.jvmargs=\"-Xmx256m\"" C-m
-            sleep 5
+            sleep 30
 
             # Spring 애플리케이션을 백그라운드에서 실행
             tmux send-keys "cd ${REPO_DIR}/backend" C-m
             tmux send-keys "java -Xms64m -Xmx128m -jar build/libs/project2-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &" C-m
-            sleep 5
+            sleep 30
 
             # Frontend 작업을 위한 새 tmux 창
             tmux new-window -t deploy_session:1 -n 'frontend'
