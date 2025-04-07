@@ -58,10 +58,8 @@ class PostServiceTest {
     @Test
     fun createPostSuccessfully() {
         // given
-        val member = Member(
-                id = 1L,
-                email = "test@test.com",
-                nickname = "tester")
+        val member = Member()
+        member.id = 1L
         val place = Place()
         place.id = 1L
         val requestDTO = PostRequestDTO()
@@ -76,12 +74,7 @@ class PostServiceTest {
 
         every { rq.actor } returns member
         every { placeRepository.findById(any()) } returns Optional.of(place)
-        every { postRepository.save(any()) } returns Post(
-                id = 1L,
-                content = "content",
-                title = "title",
-                member = member
-        )
+        every { postRepository.save(any()) } returns Post().apply { id = 1L }
 
         // when
         val result = postService.createPost(requestDTO)
@@ -99,16 +92,7 @@ class PostServiceTest {
     fun getPostByIdSuccessfully() {
         // given
         val postId = 1L
-        val post = Post(
-                id = postId,
-                content = "content",
-                title = "title",
-                member = Member(
-                        id = 1L,
-                        email = "test@test.com",
-                        nickname = "tester"
-                )
-        )
+        val post = Post().apply { id = postId }
         every { postRepository.findById(postId) } returns Optional.of(post)
 
         // when
@@ -121,7 +105,7 @@ class PostServiceTest {
 
     /**
      * 존재하지 않는 게시글 조회 시 예외 발생 테스트
-     * - 존재하지 않는 게시글 ID로 조회 시 IllegalArgumentException이 발생하는지 확인
+     * - 존재하지 않는 게시글 ID로 조회 시 IllegalArgumentException 이 발생하는지 확인
      */
     @Test
     fun throwExceptionWhenPostNotFound() {
@@ -146,17 +130,11 @@ class PostServiceTest {
         val memberId = 1L
         val authorities = mutableSetOf(SimpleGrantedAuthority("ROLE_USER"))
         val securityUser = SecurityUser(memberId, "test@test.com", authorities)
-        val member = Member(
-                id = memberId,
-                email = "test@test.com",
-                nickname = "tester"
-        )
-        val post = Post(
-                id = postId,
-                content = "content",
-                title = "title",
-                member = member
-        )
+        val member = Member().apply { id = memberId }
+        val post = Post().apply {
+            id = postId
+            this.member = member
+        }
         val requestDTO = PostRequestDTO().apply {
             title = "수정된 제목"
             content = "수정된 내용"
@@ -175,7 +153,7 @@ class PostServiceTest {
 
     /**
      * 권한 없는 사용자의 게시글 수정 시도 시 예외 발생 테스트
-     * - 권한이 없는 사용자가 게시글 수정 시도 시 ServiceException이 발생하는지 확인
+     * - 권한이 없는 사용자가 게시글 수정 시도 시 ServiceException 이 발생하는지 확인
      */
     @Test
     fun throwExceptionWhenUnauthorizedUserTriesToUpdatePost() {
@@ -185,17 +163,11 @@ class PostServiceTest {
         val otherMemberId = 2L
         val authorities = mutableSetOf(SimpleGrantedAuthority("ROLE_USER"))
         val securityUser = SecurityUser(otherMemberId, "test@test.com", authorities)
-        val member = Member(
-                id = memberId,
-                email = "test@test.com",
-                nickname = "tester"
-        )
-        val post = Post(
-                id = postId,
-                content = "content",
-                title = "title",
-                member = member
-        )
+        val member = Member().apply { id = memberId }
+        val post = Post().apply {
+            id = postId
+            this.member = member
+        }
         val requestDTO = PostRequestDTO()
 
         every { postRepository.findById(postId) } returns Optional.of(post)
@@ -218,17 +190,11 @@ class PostServiceTest {
         val memberId = 1L
         val authorities = mutableSetOf(SimpleGrantedAuthority("ROLE_USER"))
         val securityUser = SecurityUser(memberId, "test@test.com", authorities)
-        val member = Member(
-                id = memberId,
-                email = "test@test.com",
-                nickname = "tester"
-        )
-        val post = Post(
-                id = postId,
-                content = "content",
-                title = "title",
-                member = member
-        )
+        val member = Member().apply { id = memberId }
+        val post = Post().apply {
+            id = postId
+            this.member = member
+        }
 
         every { postRepository.findById(postId) } returns Optional.of(post)
         every { postRepository.deleteById(postId) } just Runs
@@ -249,26 +215,8 @@ class PostServiceTest {
         // given
         val pageable = PageRequest.of(0, 10)
         val posts = listOf(
-                Post(
-                        id = 1L,
-                        content = "content1",
-                        title = "title1",
-                        member = Member(
-                                id = 1L,
-                                email = "test1@test.com",
-                                nickname = "tester1"
-                        )
-                ),
-                Post(
-                        id = 2L,
-                        content = "content2",
-                        title = "title2",
-                        member = Member(
-                                id = 2L,
-                                email = "test2@test.com",
-                                nickname = "tester2"
-                        )
-                )
+                Post().apply { id = 1L },
+                Post().apply { id = 2L }
         )
         val pagedPosts = PageImpl(posts)
 
