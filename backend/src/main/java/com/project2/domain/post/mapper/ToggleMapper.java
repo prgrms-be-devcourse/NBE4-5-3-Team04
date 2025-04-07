@@ -1,10 +1,11 @@
 package com.project2.domain.post.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.project2.domain.member.entity.Member;
 import com.project2.domain.post.entity.Likes;
 import com.project2.domain.post.entity.Post;
 import com.project2.domain.post.entity.Scrap;
-import org.springframework.stereotype.Component;
 
 @Component
 public class ToggleMapper {

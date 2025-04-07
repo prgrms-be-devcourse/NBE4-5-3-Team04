@@ -51,11 +51,11 @@ public class AuthTokenServiceTest {
     @DisplayName("access token 생성")
     void accessToken() {
         Member mockMember = Member.builder()
-            .id(1L)
-            .email("test@test.com")
-            .nickname("nickname")
-            .provider(Provider.NAVER)
-            .build();
+                .id(1L)
+                .email("test@test.com")
+                .nickname("nickname")
+                .provider(Provider.NAVER)
+                .build();
 
         String accessToken = authTokenService.genAccessToken(mockMember);
 
