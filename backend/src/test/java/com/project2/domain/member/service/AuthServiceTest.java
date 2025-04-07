@@ -1,12 +1,8 @@
 package com.project2.domain.member.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.Optional;
-
+import com.project2.domain.member.entity.Member;
+import com.project2.domain.member.repository.MemberRepository;
+import com.project2.global.exception.ServiceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,27 +11,27 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.project2.domain.member.entity.Member;
-import com.project2.domain.member.repository.MemberRepository;
-import com.project2.global.exception.ServiceException;
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 
-    @Mock
-    private MemberRepository memberRepository;
-
-    @Mock
-    private AuthTokenService authTokenService;
-
-    @InjectMocks
-    private AuthService authService;
-
-    private Member mockMember;
     private final String validAccessToken = "validAccessToken";
     private final String invalidAccessToken = "invalidAccessToken";
     private final String validRefreshToken = "validRefreshToken";
     private final String invalidRefreshToken = "invalidRefreshToken";
+    @Mock
+    private MemberRepository memberRepository;
+    @Mock
+    private AuthTokenService authTokenService;
+    @InjectMocks
+    private AuthService authService;
+    private Member mockMember;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -44,9 +40,9 @@ class AuthServiceTest {
         injectValue(authTokenService, "refreshTokenExpireSeconds", 7200); // test용 refreshToken
 
         mockMember = Member.builder()
-            .id(1L)
-            .email("test@example.com")
-            .build();
+                .id(1L)
+                .email("test@example.com")
+                .build();
     }
 
     private void injectValue(Object target, String fieldName, Object value) throws Exception {

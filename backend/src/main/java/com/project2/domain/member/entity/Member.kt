@@ -59,11 +59,11 @@ class Member() : BaseTime() {
     }
 
     fun getAuthorities(): Collection<GrantedAuthority> =
-        getMemberAuthoritiesAsString().map { SimpleGrantedAuthority(it) }
+            getMemberAuthoritiesAsString().map { SimpleGrantedAuthority(it) }
 
     fun getMemberAuthoritiesAsString(): List<String> =
-        emptyList()
+            emptyList()
 
     fun getProfileImageUrlOrDefaultUrl(): String =
-        profileImageUrl?.takeIf { it.isNotBlank() } ?: "/default-profile.png"
+            profileImageUrl?.takeIf { it.isNotBlank() } ?: "/default-profile.png"
 }
