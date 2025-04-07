@@ -6,7 +6,7 @@ import com.project2.global.entity.BaseTime
 import jakarta.persistence.*
 
 @Entity
-class Post() : BaseTime() {경
+class Post() : BaseTime() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
