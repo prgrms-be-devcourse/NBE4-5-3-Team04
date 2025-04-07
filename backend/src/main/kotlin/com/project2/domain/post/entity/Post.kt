@@ -38,6 +38,7 @@ class Post(
 ) : BaseTime() {
 
     companion object {
+        @JvmStatic
         fun builder() = PostBuilder()
     }
 
