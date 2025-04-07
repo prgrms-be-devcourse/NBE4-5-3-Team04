@@ -20,9 +20,9 @@ import java.time.LocalDateTime;
 public class BaseTime {
 
 	@CreatedDate
-	@Setter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PROTECTED)
 	@JsonProperty("createdAt")
-	private LocalDateTime createdDate;
+	public LocalDateTime createdDate; // Java에서 Kotlin변환으로 인한 Builder 미사용으로 접근자(public) 임시 변경
 
 	@LastModifiedDate
 	@Setter(AccessLevel.PRIVATE)
