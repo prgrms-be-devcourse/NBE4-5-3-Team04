@@ -12,14 +12,14 @@ public class ToggleMapper {
     public Likes toLikes(Long userId, Long postId) {
         return Likes.builder()
                 .post(Post.builder().id(postId).build())
-                .member(Member.builder().id(userId).build())
+                .member(Member.ofId(userId))
                 .build();
     }
 
     public Scrap toScrap(Long userId, Post post) {
         return Scrap.builder()
                 .post(post)
-                .member(Member.builder().id(userId).build())
+                .member(Member.ofId(userId))
                 .build();
     }
 }

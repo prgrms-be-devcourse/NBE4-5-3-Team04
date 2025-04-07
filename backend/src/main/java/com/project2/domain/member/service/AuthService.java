@@ -30,10 +30,10 @@ public class AuthService {
 		String email = (String)payload.get("email");
 
 		return Optional.of(
-			Member.builder()
-				.id(id)
-				.email(email)
-				.build()
+			Member.ofIdAndEmail(
+				id,
+				email
+			)
 		);
 	}
 

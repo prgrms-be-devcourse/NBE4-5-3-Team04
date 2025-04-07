@@ -50,12 +50,11 @@ public class AuthTokenServiceTest {
     @Test
     @DisplayName("access token 생성")
     void accessToken() {
-        Member mockMember = Member.builder()
-            .id(1L)
-            .email("test@test.com")
-            .nickname("nickname")
-            .provider(Provider.NAVER)
-            .build();
+        Member mockMember = Member.ofIdAndEmailAndNicknameAndProvider(
+            1L,
+            "test@test.com",
+            "nickname",
+            Provider.NAVER);
 
         String accessToken = authTokenService.genAccessToken(mockMember);
 
@@ -65,12 +64,11 @@ public class AuthTokenServiceTest {
     @Test
     @DisplayName("jwt valid check")
     void checkValid() {
-        Member mockMember = Member.builder()
-                .id(1L)
-                .email("test@test.com")
-                .nickname("nickname")
-                .provider(Provider.NAVER)
-                .build();
+        Member mockMember = Member.ofIdAndEmailAndNicknameAndProvider(
+            1L,
+            "test@test.com",
+            "nickname",
+            Provider.NAVER);
 
         String accessToken = authTokenService.genAccessToken(mockMember);
 

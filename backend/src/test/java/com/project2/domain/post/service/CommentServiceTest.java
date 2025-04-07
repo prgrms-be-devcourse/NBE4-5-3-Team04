@@ -58,7 +58,11 @@ class CommentServiceTest {
 
 	@BeforeEach
 	void setUp() {
-		testUser = Member.builder().id(1L).email("test@example.com").nickname("TestUser").build();
+		testUser = Member.ofIdAndEmailAndNickname(
+			1L,
+			"test@example.com",
+			"TestUser"
+		);
 		testPost = Post.builder().id(1L).build();
 
 		parentComment = Comment.builder()
@@ -139,7 +143,7 @@ class CommentServiceTest {
 	@Test
 	@DisplayName("댓글 수정 실패 - 권한 없음")
 	void updateComment_Fail_NoPermission() {
-		Member anotherUser = Member.builder().id(2L).build();
+		Member anotherUser = Member.ofId(2L);
 		when(rq.getActor()).thenReturn(anotherUser);
 		when(commentRepository.findById(parentComment.getId())).thenReturn(Optional.of(parentComment));
 
@@ -163,7 +167,7 @@ class CommentServiceTest {
 	@Test
 	@DisplayName("댓글 삭제 실패 - 권한 없음")
 	void deleteComment_Fail_NoPermission() {
-		Member anotherUser = Member.builder().id(2L).build();
+		Member anotherUser = Member.ofId(2L);
 		when(rq.getActor()).thenReturn(anotherUser);
 		when(commentRepository.findById(parentComment.getId())).thenReturn(Optional.of(parentComment));
 

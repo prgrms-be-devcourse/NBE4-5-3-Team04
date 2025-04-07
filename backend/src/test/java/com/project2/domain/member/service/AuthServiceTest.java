@@ -42,10 +42,9 @@ class AuthServiceTest {
         injectValue(authTokenService, "accessTokenExpireSeconds", 3600); // test용 accessToken
         injectValue(authTokenService, "refreshTokenExpireSeconds", 7200); // test용 refreshToken
 
-        mockMember = Member.builder()
-                .id(1L)
-                .email("test@example.com")
-                .build();
+        mockMember = Member.ofIdAndEmail(
+                1L,
+                "test@example.com");
     }
 
     private void injectValue(Object target, String fieldName, Object value) throws Exception {

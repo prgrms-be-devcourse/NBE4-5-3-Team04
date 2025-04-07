@@ -48,13 +48,13 @@ class MemberControllerTest {
 	@BeforeEach
 	void setUp() {
 		mockMvc = MockMvcBuilders.standaloneSetup(memberController).build();
-		mockMember = Member.builder()
-			.id(1L)
-			.email("test@test.com")
-			.nickname("test")
-			.provider(Provider.NAVER)
-			.createdDate(LocalDateTime.now())
-			.build();
+		mockMember = Member.ofMemberAndCreatedDate(
+			1L,
+			"test@test.com",
+			"test",
+			Provider.NAVER,
+			LocalDateTime.now()
+		);
 
 		actor = new SecurityUser(mockMember);
 

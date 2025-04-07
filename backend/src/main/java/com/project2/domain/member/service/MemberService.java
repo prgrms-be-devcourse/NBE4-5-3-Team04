@@ -25,12 +25,14 @@ public class MemberService {
 	@Transactional
 	public Member signUp(String email, String nickname, String profileImage, Provider provider) {
 
-		Member member = memberRepository.save(Member.builder()
-			.email(email)
-			.nickname(nickname)
-			.provider(provider)
-			.profileImageUrl("")
-			.build());
+		Member member = memberRepository.save(
+			Member.ofEmailAndNicknameAndProvider(
+				email,
+				nickname,
+				provider,
+				""
+			)
+		);
 
 		Long memberId = member.getId();
 
