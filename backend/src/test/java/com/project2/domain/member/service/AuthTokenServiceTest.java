@@ -1,8 +1,9 @@
 package com.project2.domain.member.service;
 
-import com.project2.domain.member.entity.Member;
-import com.project2.domain.member.enums.Provider;
-import com.project2.global.util.Ut;
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,9 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.project2.domain.member.entity.Member;
+import com.project2.domain.member.enums.Provider;
+import com.project2.global.util.Ut;
 
 @Transactional
 @ExtendWith(MockitoExtension.class)
@@ -50,11 +51,12 @@ public class AuthTokenServiceTest {
     @Test
     @DisplayName("access token 생성")
     void accessToken() {
-        Member mockMember = Member.ofIdAndEmailAndNicknameAndProvider(
-            1L,
-            "test@test.com",
-            "nickname",
-            Provider.NAVER);
+        Member mockMember = Member.builder()
+            .id(1L)
+            .email("test@test.com")
+            .nickname("nickname")
+            .provider(Provider.NAVER)
+            .build();
 
         String accessToken = authTokenService.genAccessToken(mockMember);
 
@@ -64,11 +66,12 @@ public class AuthTokenServiceTest {
     @Test
     @DisplayName("jwt valid check")
     void checkValid() {
-        Member mockMember = Member.ofIdAndEmailAndNicknameAndProvider(
-            1L,
-            "test@test.com",
-            "nickname",
-            Provider.NAVER);
+        Member mockMember = Member.builder()
+            .id(1L)
+            .email("test@test.com")
+            .nickname("nickname")
+            .provider(Provider.NAVER)
+            .build();
 
         String accessToken = authTokenService.genAccessToken(mockMember);
 

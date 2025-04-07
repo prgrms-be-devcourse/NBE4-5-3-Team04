@@ -1,8 +1,12 @@
 package com.project2.domain.member.service;
 
-import com.project2.domain.member.entity.Member;
-import com.project2.domain.member.repository.MemberRepository;
-import com.project2.global.exception.ServiceException;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,12 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import com.project2.domain.member.entity.Member;
+import com.project2.domain.member.repository.MemberRepository;
+import com.project2.global.exception.ServiceException;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
@@ -42,9 +43,10 @@ class AuthServiceTest {
         injectValue(authTokenService, "accessTokenExpireSeconds", 3600); // test용 accessToken
         injectValue(authTokenService, "refreshTokenExpireSeconds", 7200); // test용 refreshToken
 
-        mockMember = Member.ofIdAndEmail(
-                1L,
-                "test@example.com");
+        mockMember = Member.builder()
+            .id(1L)
+            .email("test@example.com")
+            .build();
     }
 
     private void injectValue(Object target, String fieldName, Object value) throws Exception {

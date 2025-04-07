@@ -40,13 +40,13 @@ class MemberServiceTest {
 
 	@BeforeEach
 	void setUp() {
-		mockMember = Member.ofFull(
-			1L,
-				email,
-				nickname,
-				provider,
-				profileImageUrl
-			);
+		mockMember = Member.builder()
+			.id(1L)
+			.email(email)
+			.nickname(nickname)
+			.provider(provider)
+			.profileImageUrl(profileImageUrl)
+			.build();
 
 		actor = new SecurityUser(mockMember);
 	}

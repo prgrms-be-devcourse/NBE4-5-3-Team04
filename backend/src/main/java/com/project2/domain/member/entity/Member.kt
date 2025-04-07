@@ -3,7 +3,6 @@ package com.project2.domain.member.entity
 import com.project2.domain.member.enums.Provider
 import com.project2.global.entity.BaseTime
 import jakarta.persistence.*
-import org.springframework.data.annotation.CreatedDate
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import java.time.LocalDateTime
@@ -29,75 +28,33 @@ class Member() : BaseTime() {
 
     companion object {
         @JvmStatic
-        fun ofId(id: Long) = Member().apply { this.id = id }
+        fun builder() = MemberBuilder()
+    }
 
-        @JvmStatic
-        fun ofIdAndEmail(id: Long, email: String) = Member().apply {
-            this.id = id
-            this.email = email
-        }
+    class MemberBuilder {
+        private var id: Long? = null
+        private var email: String = ""
+        private var nickname: String = ""
+        private var profileImageUrl: String? = null
+        private var provider: Provider? = null
+        private var createdDate: LocalDateTime? = null
 
-        @JvmStatic
-        fun ofIdAndEmailAndNickname(id: Long, email: String, nickname: String) = Member().apply {
-            this.id = id
-            this.email = email
-            this.nickname = nickname
-        }
+        fun id(id: Long?) = apply { this.id = id }
+        fun email(email: String) = apply { this.email = email }
+        fun nickname(nickname: String) = apply { this.nickname = nickname }
+        fun profileImageUrl(profileImageUrl: String?) = apply { this.profileImageUrl = profileImageUrl }
+        fun provider(provider: Provider) = apply { this.provider = provider }
+        fun createdDate(createdDate: LocalDateTime) = apply { this.createdDate = createdDate }
 
-        @JvmStatic
-        fun ofFull(
-            id: Long,
-            email: String,
-            nickname: String,
-            provider: Provider,
-            profileImageUrl: String? = null
-        ) = Member().apply {
-            this.id = id
-            this.email = email
-            this.nickname = nickname
-            this.provider = provider
-            this.profileImageUrl = profileImageUrl
-        }
-
-        @JvmStatic
-        fun ofIdAndEmailAndNicknameAndProvider(
-            id: Long,
-            email: String,
-            nickname: String,
-            provider: Provider,
-        ) = Member().apply {
-            this.id = id
-            this.email = email
-            this.nickname = nickname
-            this.provider = provider
-        }
-
-        @JvmStatic
-        fun ofEmailAndNicknameAndProvider(
-            email: String,
-            nickname: String,
-            provider: Provider,
-            profileImageUrl: String? = null
-        ) = Member().apply {
-            this.email = email
-            this.nickname = nickname
-            this.provider = provider
-            this.profileImageUrl = profileImageUrl
-        }
-
-        @JvmStatic
-        fun ofMemberAndCreatedDate(
-            id: Long,
-            email: String,
-            nickname: String,
-            provider: Provider,
-            createdDate: LocalDateTime
-        ) = Member().apply {
-            this.id = id
-            this.email = email
-            this.nickname = nickname
-            this.provider = provider
-            this.createdDate = createdDate
+        fun build() = Member().apply {
+            this.id = this@MemberBuilder.id
+            this.email = this@MemberBuilder.email
+            this.nickname = this@MemberBuilder.nickname
+            this.profileImageUrl = this@MemberBuilder.profileImageUrl
+            this.provider = this@MemberBuilder.provider
+            if (this@MemberBuilder.createdDate != null) {
+                this.createdDate = this@MemberBuilder.createdDate!!
+            }
         }
     }
 

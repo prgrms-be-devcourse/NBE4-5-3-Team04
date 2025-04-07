@@ -58,10 +58,10 @@ public class Rq {
 
 		SecurityUser user = (SecurityUser)principal;
 
-		return Member.ofIdAndEmail(
-			user.getId(),
-			user.getUsername()
-		);
+		return Member.builder()
+			.id(user.getId())
+			.email(user.getUsername())
+			.build();
 	}
 
 	public String getHeader(String name) {
