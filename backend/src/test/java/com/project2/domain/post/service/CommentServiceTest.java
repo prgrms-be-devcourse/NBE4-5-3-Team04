@@ -58,8 +58,10 @@ class CommentServiceTest {
 
 	@BeforeEach
 	void setUp() {
+		Post post = new Post();
+		post.setId(1L);
 		testUser = Member.builder().id(1L).email("test@example.com").nickname("TestUser").build();
-		testPost = Post.builder().id(1L).build();
+		testPost = post;
 
 		parentComment = Comment.builder()
 			.id(101L)
