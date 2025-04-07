@@ -21,20 +21,17 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 
-    @Mock
-    private MemberRepository memberRepository;
-
-    @Mock
-    private AuthTokenService authTokenService;
-
-    @InjectMocks
-    private AuthService authService;
-
-    private Member mockMember;
     private final String validAccessToken = "validAccessToken";
     private final String invalidAccessToken = "invalidAccessToken";
     private final String validRefreshToken = "validRefreshToken";
     private final String invalidRefreshToken = "invalidRefreshToken";
+    @Mock
+    private MemberRepository memberRepository;
+    @Mock
+    private AuthTokenService authTokenService;
+    @InjectMocks
+    private AuthService authService;
+    private Member mockMember;
 
     @BeforeEach
     void setUp() throws Exception {
