@@ -32,15 +32,18 @@ class PostService(
     fun createPost(requestDTO: PostRequestDTO): Long {
         val actor = rq.actor
 
-        /* placeId가 존재하는지 먼저 확인한 후, 게시물이 성공적으로 저장되면 장소도 저장 */
-        var place = placeRepository.findById(requestDTO.placeId!!).orElse(null)
+        val placeId = requestDTO.placeId!!
+        val latitude = requestDTO.latitude!!
+        val longitude = requestDTO.longitude!!
+
+        var place = placeRepository.findById(placeId).orElse(null)
 
         if (place == null) {
             place = placeService.savePlace(
-                    requestDTO.placeId,
+                    placeId,
                     requestDTO.placeName,
-                    requestDTO.latitude,
-                    requestDTO.longitude,
+                    latitude,
+                    longitude,
                     requestDTO.region,
                     requestDTO.category
             )
