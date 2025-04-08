@@ -1,9 +1,8 @@
-package com.project2.domain.post.service
+package com.project2.domain.member.service
 
 import com.project2.domain.member.entity.Member
 import com.project2.domain.member.enums.Provider
 import com.project2.domain.member.repository.MemberRepository
-import com.project2.domain.member.service.MemberService
 import com.project2.global.security.SecurityUser
 import com.project2.global.util.ImageService
 import org.assertj.core.api.Assertions.assertThat
