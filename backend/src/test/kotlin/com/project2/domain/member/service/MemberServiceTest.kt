@@ -99,10 +99,10 @@ class MemberServiceTest {
         `when`(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember))
 
         // When
-        val updatedMember = memberService.updateNickname(memberId, newNickname)
+        memberService.updateNickname(memberId, newNickname)
 
         // Then
-        assertThat(updatedMember.nickname).isEqualTo(newNickname)
+        assertThat(mockMember.nickname).isEqualTo(newNickname)
         verify(memberRepository).findById(memberId)
     }
 
@@ -123,10 +123,10 @@ class MemberServiceTest {
         `when`(imageService.storeProfileImage(memberId, mockFile)).thenReturn(mockFilePath)
 
         // When
-        val updatedMember = memberService.updateProfileImageUrl(memberId, mockFile)
+        memberService.updateProfileImageUrl(memberId, mockFile)
 
         // Then
-        assertThat(updatedMember.profileImageUrl).isEqualTo(mockFilePath)
+        assertThat(mockMember.profileImageUrl).isEqualTo(mockFilePath)
         verify(memberRepository).findById(memberId)
         verify(imageService).storeProfileImage(memberId, mockFile)
     }
