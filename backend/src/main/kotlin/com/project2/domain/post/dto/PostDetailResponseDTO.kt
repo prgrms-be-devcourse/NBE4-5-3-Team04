@@ -21,9 +21,5 @@ class PostDetailResponseDTO(
     val createdDate: LocalDateTime = post.createdDate
     val modifiedDate: LocalDateTime = post.modifiedDate
     val placeDTO: PlaceDTO = PlaceDTO(post.place.name, post.place.krCategory)
-    val authorDTO: AuthorDTO = AuthorDTO(
-            post.member.id!!,
-            post.member.nickname,
-            post.member.profileImageUrl
-    )
+    val authorDTO: AuthorDTO = AuthorDTO.from(post.member)
 }
