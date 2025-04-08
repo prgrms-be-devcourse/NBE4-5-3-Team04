@@ -19,9 +19,5 @@ class PostResponseDTO(
     val isScrapped: Boolean = post.scraps.any { it.member.id == actor.id }
     val commentCount: Int = post.comments.size
     val imageUrls: List<String> = post.images.map { it.imageUrl }.sorted()
-    val author: AuthorDTO = AuthorDTO(
-            post.member.id!!,
-            post.member.nickname,
-            post.member.profileImageUrl
-    )
+    val author: AuthorDTO = AuthorDTO.from(post.member)
 }
