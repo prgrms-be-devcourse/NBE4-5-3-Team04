@@ -40,36 +40,36 @@ class FollowServiceTest {
     @BeforeEach
     fun setUp() {
         follower = Member()
-        follower!!.id = 1L
+        follower.id = 1L
 
         following = Member()
-        following!!.id = 2L
+        following.id = 2L
 
         val follows = Follows(null, follower, following)
         follows.follower = follower
         follows.following = following
 
-        requestDto = FollowRequestDto()
-        requestDto!!.followingId = following!!.id
+        requestDto = FollowRequestDto(followerId = follower.id!!, followingId = following.id!!)
+        requestDto.followingId = following.id!!
     }
 
     @Test
     @DisplayName("팔로우 성공")
     fun testToggleFollow_Success_Follow() {
         // given
-        Mockito.`when`(rq!!.actor).thenReturn(follower)
+        Mockito.`when`(rq.actor).thenReturn(follower)
         Mockito.`when`(
-            following!!.id?.let {
-                memberRepository!!.findById(
+            following.id?.let {
+                memberRepository.findById(
                     it
                 )
-            }).thenReturn(Optional.of(following!!)) // following.getId() 사용
+            }).thenReturn(Optional.of(following)) // following.getId() 사용
 //        Mockito.`when`(followRepository!!.findByFollowerAndFollowing(follower, following)).thenReturn(Optional.empty())
         val savedFollow = Follows(1L, follower, following)
-        Mockito.`when`(followRepository?.save(ArgumentMatchers.any(Follows::class.java))).thenReturn(savedFollow)
+        Mockito.`when`(followRepository.save(ArgumentMatchers.any(Follows::class.java))).thenReturn(savedFollow)
 
         // when
-        val response = followService!!.toggleFollow(requestDto!!)
+        val response = followService.toggleFollow(requestDto)
 
         // then
         Assertions.assertEquals(1L, response.data.followerId)
@@ -81,27 +81,27 @@ class FollowServiceTest {
     fun testToggleFollow_Success_Unfollow() {
         // 1. Given (준비)
         //   - 현재 사용자(follower) 설정
-        Mockito.`when`(rq!!.actor).thenReturn(follower)
+        Mockito.`when`(rq.actor).thenReturn(follower)
 
         //   - requestDto에 followingId 설정
-        requestDto!!.followingId = following!!.id
+        requestDto.followingId = following.id!!
 
         //   - 팔로잉 설정 (memberRepository.findById() 스텁)
         Mockito.`when`(
-            following!!.id?.let {
-                memberRepository!!.findById(
+            following.id?.let {
+                memberRepository.findById(
                     it
                 )
-            }).thenReturn(Optional.of(following!!))
+            }).thenReturn(Optional.of(following))
 
         //   - 팔로우 관계가 이미 존재하는 경우 설정
         val existingFollow = Follows(1L, follower, following)
-//        Mockito.`when`(followRepository!!.findByFollowerAndFollowing(follower, following))
-//            .thenReturn(Optional.of(existingFollow))
+        Mockito.`when`(followRepository.findByFollowerAndFollowing(follower, following))
+            .thenReturn(Optional.of(existingFollow))
 
         // 2. When (실행)
         //   - toggleFollow 메서드 실행
-        val response = followService!!.toggleFollow(requestDto!!)
+        val response = followService.toggleFollow(requestDto)
 
         // 3. Then (검증)
         //   - 응답 코드가 204인지 확인 (언팔로우 성공)

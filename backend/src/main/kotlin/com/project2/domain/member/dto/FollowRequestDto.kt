@@ -1,19 +1,17 @@
 package com.project2.domain.member.dto
 
-import lombok.Getter
-import lombok.NoArgsConstructor
-import lombok.Setter
+import com.project2.domain.member.entity.Member
 
-@Getter
-@Setter
-@NoArgsConstructor
-class FollowRequestDto {
-    var followerId: Long? = null
-    var followingId: Long? = null
+data class FollowRequestDto(
+    var followerId: Long, var followingId: Long
+) {
+    companion object {
+        fun from(member: Member): FollowRequestDto = FollowRequestDto(
 
-//    public FollowRequestDto(Follows follows) {
-    //
-    //        this.followerId = follows.getFollower().getId();
-    //        this.followingId = follows.getFollowing().getId();
-    //    }
+            followerId = member.id!!,
+            followingId = member.id!!,
+
+            )
+    }
+
 }

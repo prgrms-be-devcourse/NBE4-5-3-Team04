@@ -21,6 +21,11 @@ import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import java.util.*
 
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.any
+import org.mockito.kotlin.whenever
+import org.mockito.kotlin.verify
+
 @ExtendWith(MockitoExtension::class)
 class FollowerServiceTest {
     @Mock
@@ -68,67 +73,47 @@ class FollowerServiceTest {
         follow2.following = user
 
         val followsList = Arrays.asList(follow1, follow2)
-        val followsPage: Page<Follows?> = PageImpl(followsList)
+        val followsPage: Page<Follows> = PageImpl(followsList)
 
-        Mockito.`when`(
+        whenever(
             followRepository.findByFollowing(
-                ArgumentMatchers.eq(user), ArgumentMatchers.any(
-                    Pageable::class.java
-                )
+                eq(user), any()
             )
         ).thenReturn(followsPage)
 
         val followers = followerService.getFollowers(1L, Pageable.unpaged())
 
         Assertions.assertNotNull(followers)
-        Assertions.assertEquals(2, followers!!.content.size)
+        Assertions.assertEquals(2, followers.content.size)
 
         Assertions.assertTrue(followers.content.stream().anyMatch { f: FollowerResponseDto ->
-            f.id!!.equals(
-                follower1.id
-            )
+            f.userId == follower1.id
         })
         Assertions.assertTrue(followers.content.stream().anyMatch { f: FollowerResponseDto ->
-            f.id!!.equals(
-                follower2.id
-            )
+            f.userId == follower2.id
         })
 
         Mockito.verify(rq).actor
         Mockito.verify(memberService)?.findByIdOrThrow(1L)
-        Mockito.verify(followRepository).findByFollowing(
-            ArgumentMatchers.eq(user), ArgumentMatchers.any(
-                Pageable::class.java
-            )
-        )
+        verify(followRepository).findByFollowing(eq(user), any())
     }
 
     @Test
     fun testGetFollowers_NoFollowers() {
-        Mockito.`when`(rq.actor).thenReturn(user)
-        Mockito.`when`(memberService.findByIdOrThrow(1L)).thenReturn(user)
+        whenever(rq.actor).thenReturn(user)
+        whenever(memberService.findByIdOrThrow(eq(1L))).thenReturn(user)
 
         val emptyPage = Page.empty<Follows?>()
-        Mockito.`when`(
-            followRepository.findByFollowing(
-                ArgumentMatchers.eq(user), ArgumentMatchers.any(
-                    Pageable::class.java
-                )
-            )
-        ).thenReturn(emptyPage)
+        whenever(followRepository.findByFollowing(eq(user), any())).thenReturn(emptyPage)
 
         val followers = followerService.getFollowers(1L, Pageable.unpaged())
 
         Assertions.assertNotNull(followers)
-        Assertions.assertTrue(followers!!.isEmpty)
+        Assertions.assertTrue(followers.isEmpty)
 
-        Mockito.verify(rq).actor
-        Mockito.verify(memberService).findByIdOrThrow(1L)
-        Mockito.verify(followRepository).findByFollowing(
-            ArgumentMatchers.eq(user), ArgumentMatchers.any(
-                Pageable::class.java
-            )
-        )
+        verify(rq).actor
+        verify(memberService).findByIdOrThrow(eq(1L))
+        verify(followRepository).findByFollowing(eq(user), any())
     }
 
     @Test
@@ -157,6 +142,7 @@ class FollowerServiceTest {
         Mockito.`when`(followRepository.countByFollowing(user)).thenReturn(5L)
 
         // When
+
         val followerCount = followerService.getFollowersCount(user)
 
         // Then

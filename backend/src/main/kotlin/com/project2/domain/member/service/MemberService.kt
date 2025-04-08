@@ -35,17 +35,15 @@ class MemberService(private val memberRepository: MemberRepository, private val 
     fun findAllMembers(): List<Member> = memberRepository.findAll()
 
     @Transactional
-    fun updateNickname(memberId: Long, nickname: String): Member {
+    fun updateNickname(memberId: Long, nickname: String) {
         val member = findByIdOrThrow(memberId)
         member.nickname = nickname
-        return member
     }
 
     @Transactional
-    fun updateProfileImageUrl(memberId: Long, profileImage: MultipartFile): Member {
+    fun updateProfileImageUrl(memberId: Long, profileImage: MultipartFile) {
         val member = findByIdOrThrow(memberId)
         val savedImagePath = imageService.storeProfileImage(memberId, profileImage)
         member.profileImageUrl = savedImagePath
-        return member
     }
 }

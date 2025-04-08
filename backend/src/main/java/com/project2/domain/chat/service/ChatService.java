@@ -50,14 +50,14 @@ public class ChatService {
 	public List<ChatRoomResponseDTO> getAllChatRooms(Long actorId) {
 		return chatRoomRepository.findByMembers_IdOrderByLatestMessage(actorId)
 			.stream()
-			.map(chatRoom -> new ChatRoomResponseDTO(chatRoom, actorId))
+			.map(chatRoom -> ChatRoomResponseDTO.from(chatRoom, actorId))
 			.toList();
 	}
 
 	@Transactional(readOnly = true)
 	public Page<ChatMessageResponseDTO> getChatMessages(UUID roomId, Pageable pageable) {
 		Page<ChatMessage> messages = chatMessageRepository.findByChatRoomId(roomId, pageable);
-		return messages.map(ChatMessageResponseDTO::new);
+		return messages.map(ChatMessageResponseDTO::from);
 	}
 
 	// 메시지 전송
@@ -73,6 +73,6 @@ public class ChatService {
 			.build();
 
 		chatMessage = chatMessageRepository.save(chatMessage);
-		return new ChatMessageResponseDTO(chatMessage);
+		return ChatMessageResponseDTO.from(chatMessage);
 	}
 }

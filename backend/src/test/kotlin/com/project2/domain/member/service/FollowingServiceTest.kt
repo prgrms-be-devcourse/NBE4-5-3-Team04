@@ -49,8 +49,8 @@ class FollowingServiceTest {
         Mockito.`when`(rq.actor).thenReturn(user)
         Mockito.`when`(memberService.findByIdOrThrow(1L)).thenReturn(user)
 
-        val follow1 = Follows(1L, user, following1)
-        val follow2 = Follows(2L, user, following2)
+        val follow1 = Follows(null, user, following1)
+        val follow2 = Follows(null, user, following2)
 
         Mockito.`when`(followRepository.findByFollower(user)).thenReturn(Arrays.asList(follow1, follow2))
 
@@ -63,15 +63,11 @@ class FollowingServiceTest {
 
         followings.stream().let {
             Assertions.assertTrue(it.anyMatch { f: FollowerResponseDto ->
-                f.id!!.equals(
-                    following1.id
-                )
+                f.userId == following1.id
             })
         }
         Assertions.assertTrue(followings.stream().anyMatch { f: FollowerResponseDto ->
-            f.id!!.equals(
-                following2.id
-            )
+            f.userId == following2.id
         })
 
         Mockito.verify(memberService)?.findByIdOrThrow(1L)
@@ -90,9 +86,7 @@ class FollowingServiceTest {
 
         // Then
         Assertions.assertNotNull(followings)
-        if (followings != null) {
-            Assertions.assertTrue(followings.isEmpty())
-        }
+        Assertions.assertTrue(followings.isEmpty())
     }
 
     @Test
