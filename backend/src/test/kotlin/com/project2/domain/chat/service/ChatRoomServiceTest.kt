@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
+import java.time.LocalDateTime
 import java.util.*
 
 class ChatServiceTest {
@@ -80,8 +81,8 @@ class ChatServiceTest {
     fun `should return all chat rooms for a member`() {
         // given
         val actorId = 1L
-        val room1 = ChatRoom().apply { members = mutableSetOf(Member().apply { id = actorId }, Member().apply { id = 2L }) }
-        val room2 = ChatRoom().apply { members = mutableSetOf(Member().apply { id = actorId }, Member().apply { id = 3L }) }
+        val room1 = ChatRoom().apply { id = UUID.randomUUID(); members = mutableSetOf(Member().apply { id = actorId }, Member().apply { id = 2L }) }
+        val room2 = ChatRoom().apply { id = UUID.randomUUID(); members = mutableSetOf(Member().apply { id = actorId }, Member().apply { id = 3L }) }
 
         every { chatRoomRepository.findByMembers_IdOrderByLatestMessage(actorId) } returns listOf(room1, room2)
 
@@ -102,12 +103,13 @@ class ChatServiceTest {
         val chatRoom = ChatRoom().apply { id = roomId }
         val sender = Member().apply { id = 1L }
 
-        val message = ChatMessage.builder()
-                .chatRoom(chatRoom)
-                .sender(sender)
-                .content("Hello")
-                .build()
-
+        val message = ChatMessage().apply {
+            this.id = 1L
+            this.chatRoom = chatRoom
+            this.sender = sender
+            this.content = "Hello"
+            this.createdDate = LocalDateTime.now()
+        }
         every { chatMessageRepository.findByChatRoomId(roomId, pageable) } returns PageImpl(listOf(message))
 
         // when
@@ -127,9 +129,11 @@ class ChatServiceTest {
         val actor = Member().apply { id = actorId }
         val chatRoom = ChatRoom()
         val message = ChatMessage().apply {
+            this.id = 1L
             this.sender = actor
             this.chatRoom = chatRoom
             this.content = content
+            this.createdDate = LocalDateTime.now()
         }
 
         every { memberRepository.getReferenceById(actorId) } returns actor
