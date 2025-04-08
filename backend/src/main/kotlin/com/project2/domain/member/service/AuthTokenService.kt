@@ -21,7 +21,7 @@ class AuthTokenService {
         return Ut.Jwt.createToken(
                 keyString,
                 accessTokenExpireSeconds,
-                mapOf("id" to member.id, "email" to member.email)
+                mapOf("id" to member.id!!, "email" to member.email)
         )
     }
 
