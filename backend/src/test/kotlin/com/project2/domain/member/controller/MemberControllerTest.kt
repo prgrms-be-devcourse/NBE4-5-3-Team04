@@ -107,7 +107,7 @@ class MemberControllerTest {
         `when`(rq.getValueFromCookie("refreshToken")).thenReturn(validRefreshToken)
         `when`(authService.getMemberByRefreshTokenOrThrow(validRefreshToken)).thenReturn(mockMember)
         `when`(rq.getRealActor(mockMember)).thenReturn(mockMember)
-        `when`(authService.genAccessToken(any(Member::class.java))).thenReturn(newAccessToken)
+        `when`(authService.genAccessToken(mockMember)).thenReturn(newAccessToken)
 
         // when & then
         mockMvc.perform(get("/api/members/refresh"))
