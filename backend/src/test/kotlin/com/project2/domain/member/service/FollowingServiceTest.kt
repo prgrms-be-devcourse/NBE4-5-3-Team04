@@ -37,10 +37,14 @@ class FollowingServiceTest {
 
     @BeforeEach
     fun setUp() {
-        user = Member.builder().id(1L).nickname("testUser").build()
-        following1 = Member.builder().id(2L).nickname("follower1").build()
-        following2 = Member.builder().id(3L).nickname("follower2").build()
+        user = createTestMember(1L, "testUser")
+        following1 = createTestMember(2L, "follower1")
+        following2 = createTestMember(3L, "follower2")
+    }
 
+    private fun createTestMember(id: Long, nickname: String) = Member().apply {
+        this.id = id
+        this.nickname = nickname
     }
 
     @Test
@@ -97,7 +101,7 @@ class FollowingServiceTest {
 
         // When & Then
         val exception = Assertions.assertThrows(
-            ServiceException::class.java
+                ServiceException::class.java
         ) {
             followingService.getFollowings(1L)
         }
