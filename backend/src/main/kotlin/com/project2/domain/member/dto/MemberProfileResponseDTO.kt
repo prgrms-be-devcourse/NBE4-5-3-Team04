@@ -18,11 +18,11 @@ data class MemberProfileResponseDTO(
         private val DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월")
 
         fun from(
-                member: Member,
-                totalPostCount: Long,
-                totalFlowerCount: Long,
-                totalFlowingCount: Long,
-                isMe: Boolean
+            member: Member,
+            totalPostCount: Long,
+            totalFlowerCount: Long,
+            totalFlowingCount: Long,
+            isMe: Boolean
         ): MemberProfileResponseDTO {
             return MemberProfileResponseDTO(
                     nickname = member.nickname,
