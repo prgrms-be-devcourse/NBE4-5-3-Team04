@@ -20,7 +20,7 @@ class FollowService(
 ) {
     @Transactional
     fun toggleFollow(requestDto: FollowRequestDto): RsData<FollowResponseDto> {
-        val actor = rq.actor // 현재 사용자
+        val actor = rq.getActor() // 현재 사용자
 
         val following = requestDto.followingId.let {
             memberRepository.findById(it).orElseThrow {

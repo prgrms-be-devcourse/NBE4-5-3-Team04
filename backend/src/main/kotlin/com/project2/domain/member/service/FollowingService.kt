@@ -16,7 +16,7 @@ class FollowingService(
     private val followRepository: FollowRepository, private val memberService: MemberService, private val rq: Rq?
 ) {
     fun getFollowings(memberId: Long): MutableList<FollowerResponseDto> {
-        val actor = rq!!.actor
+        val actor = rq!!.getActor()
 
         if (actor.id != memberId) {
             throw ServiceException("403", "자신의 팔로잉 목록만 볼 수 있습니다.")
