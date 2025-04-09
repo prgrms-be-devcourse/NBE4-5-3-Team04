@@ -20,6 +20,6 @@ class PostDetailResponseDTO(
     val isScrapped: Boolean = post.scraps.any { it.member.id == actor.id }
     val createdDate: LocalDateTime = post.createdDate
     val modifiedDate: LocalDateTime = post.modifiedDate
-    val placeDTO: PlaceDTO = PlaceDTO(post.place.name, post.place.krCategory)
+    val placeDTO: PlaceDTO = PlaceDTO(post.place.name!!, post.place.krCategory)
     val authorDTO: AuthorDTO = AuthorDTO.from(post.member)
 }
