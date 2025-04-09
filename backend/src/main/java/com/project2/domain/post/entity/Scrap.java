@@ -28,7 +28,8 @@ public class Scrap extends BaseTime {
 
 	@ManyToOne
 	@JoinColumn(nullable = false)
-	private Post post;
+	public Post post;	// Kotlin 코드(ToggleMapper 등)에서 접근 가능하도록 임시로 public 설정함
+						// 추후 Scrap 엔티티를 Kotlin으로 마이그레이션할 때 접근 제어자 재조정 예정
 
 	@ManyToOne
 	@JoinColumn(nullable = false)
