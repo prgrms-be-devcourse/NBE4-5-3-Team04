@@ -25,7 +25,7 @@ jobs:
             tmux new-session -d -s deploy_session || { echo "❌ tmux 세션 생성 실패"; exit 1; }
             sleep 2
 
-            REPO_DIR="/home/ec2-user/NBE4-5-2-Team04"
+            REPO_DIR="/home/ec2-user/NBE4-5-3-Team04"
 
             # 최신 코드 pull
             tmux send-keys "cd ${REPO_DIR}" C-m
