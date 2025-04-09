@@ -22,7 +22,6 @@ class FollowController(
     private val followService: FollowService,
     private val followerService: FollowerService,
     private val followingService: FollowingService,
-    private val postService: PostService
 ) {
     @PostMapping("/{memberid}/follows")
     fun toggleFollow(
@@ -34,18 +33,13 @@ class FollowController(
 
     @GetMapping("/{memberId}/followers")
     fun getFollowers(
-        @PathVariable memberId: Long?, @PageableDefault(size = 8) pageable: Pageable
+        @PathVariable memberId: Long, @PageableDefault(size = 8) pageable: Pageable
     ): ResponseEntity<RsData<Page<FollowerResponseDto>>> {
-        val followers = memberId?.let { followerService.getFollowers(it, pageable) }!!
+        val followers = memberId.let { followerService.getFollowers(it, pageable) }
 
-        if (followers != null) {
-            if (followers.isEmpty) {
-                return ResponseEntity.noContent().build()
-            }
+        if (followers.isEmpty) {
+            return ResponseEntity.noContent().build()
         }
-
-        println("가져온 팔로워 페이지 수: " + followers.totalPages)
-        println("가져온 팔로워 명 수: " + followers.totalElements)
 
         return ResponseEntity.ok(
             RsData(
@@ -55,9 +49,9 @@ class FollowController(
     }
 
     @GetMapping("/{memberId}/followings")
-    fun getFollowings(@PathVariable memberId: Long?): ResponseEntity<RsData<List<FollowerResponseDto>>> {
+    fun getFollowings(@PathVariable memberId: Long): ResponseEntity<RsData<List<FollowerResponseDto>>> {
         try {
-            val followings = followingService.getFollowings(memberId!!)
+            val followings = followingService.getFollowings(memberId)
 
             // Check if the list of followings is empty
             if (followings.isEmpty()) {
