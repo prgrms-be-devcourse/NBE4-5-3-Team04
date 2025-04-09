@@ -49,12 +49,11 @@ class AuthTokenServiceTest {
     @Test
     @DisplayName("access token 생성")
     fun `generate access token`() {
-        val mockMember = Member.builder()
-                .id(1L)
-                .email("test@test.com")
-                .nickname("nickname")
-                .provider(Provider.NAVER)
-                .build()
+        val mockMember = Member().apply {
+            id = 1L
+            email = "test@test.com"
+            provider = Provider.NAVER
+        }
 
         val accessToken = authTokenService.genAccessToken(mockMember)
         assertThat(accessToken).isNotBlank()
@@ -63,12 +62,12 @@ class AuthTokenServiceTest {
     @Test
     @DisplayName("jwt 유효성 검사")
     fun `validate jwt`() {
-        val mockMember = Member.builder()
-                .id(1L)
-                .email("test@test.com")
-                .nickname("nickname")
-                .provider(Provider.NAVER)
-                .build()
+        val mockMember = Member().apply {
+            id = 1L
+            email = "test@test.com"
+            nickname = "nickname"
+            provider = Provider.NAVER
+        }
 
         val accessToken = authTokenService.genAccessToken(mockMember)
 

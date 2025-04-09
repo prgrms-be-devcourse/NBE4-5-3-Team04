@@ -26,11 +26,20 @@ import java.util.*
 @ExtendWith(MockitoExtension::class)
 class CommentServiceTest {
 
-    @Mock private lateinit var memberRepository: MemberRepository
-    @Mock private lateinit var commentRepository: CommentRepository
-    @Mock private lateinit var postRepository: PostRepository
-    @Mock private lateinit var rq: Rq
-    @Mock private lateinit var commentMapper: CommentMapper
+    @Mock
+    private lateinit var memberRepository: MemberRepository
+
+    @Mock
+    private lateinit var commentRepository: CommentRepository
+
+    @Mock
+    private lateinit var postRepository: PostRepository
+
+    @Mock
+    private lateinit var rq: Rq
+
+    @Mock
+    private lateinit var commentMapper: CommentMapper
 
     @InjectMocks
     private lateinit var commentService: CommentService
@@ -43,8 +52,19 @@ class CommentServiceTest {
 
     @BeforeEach
     fun setUp() {
-        testUser = Member.builder().id(1L).email("test@example.com").nickname("TestUser").build()
-        testPost = Post.builder().id(1L).title("title").content("content").member(testUser).place(mock()).build()
+        testUser = Member().apply {
+            id = 1L
+            email = "test@example.com"
+            nickname = "TestUser"
+        }
+
+        testPost = Post().apply {
+            id = 1L
+            title = "title"
+            content = "content"
+            member = testUser
+            place = mock()
+        }
 
         parentComment = Comment().apply {
             id = 101L; content = "부모 댓글"; post = testPost; member = testUser; depth = 0
@@ -67,7 +87,7 @@ class CommentServiceTest {
         whenever(commentMapper.toEntity(request, testPost, testUser, null)).thenReturn(saved)
         whenever(commentRepository.save(saved)).thenReturn(saved)
         whenever(commentMapper.toResponseDTO(saved, testUser.nickname))
-            .thenReturn(CommentResponseDTO(saved.id, saved.content, testUser.nickname, null))
+                .thenReturn(CommentResponseDTO(saved.id, saved.content, testUser.nickname, null))
 
         val res = commentService.createComment(testPost.id!!, request)
 
@@ -89,7 +109,7 @@ class CommentServiceTest {
         whenever(commentMapper.toEntity(request, testPost, testUser, parentComment)).thenReturn(saved)
         whenever(commentRepository.save(saved)).thenReturn(saved)
         whenever(commentMapper.toResponseDTO(saved, testUser.nickname))
-            .thenReturn(CommentResponseDTO(saved.id, saved.content, testUser.nickname, 101L))
+                .thenReturn(CommentResponseDTO(saved.id, saved.content, testUser.nickname, 101L))
 
         val res = commentService.createComment(testPost.id!!, request)
 
@@ -113,7 +133,7 @@ class CommentServiceTest {
         whenever(memberRepository.findById(testUser.id!!)).thenReturn(Optional.of(testUser))
         whenever(commentRepository.findById(101L)).thenReturn(Optional.of(commentToUpdate))
         whenever(commentMapper.toResponseDTO(commentToUpdate, testUser.nickname))
-            .thenReturn(CommentResponseDTO(101L, "Updated Comment", "TestUser", null))
+                .thenReturn(CommentResponseDTO(101L, "Updated Comment", "TestUser", null))
 
         val res = commentService.updateComment(101L, request)
 
@@ -124,13 +144,15 @@ class CommentServiceTest {
     @Test
     @DisplayName("댓글 수정 실패 - 권한 없음")
     fun `update comment fail - no permission`() {
-        val otherUser = Member.builder().id(2L).build()
+        val otherUser = Member().apply {
+            id = 2L
+        }
         whenever(rq.getActor()).thenReturn(otherUser)
         whenever(commentRepository.findById(101L)).thenReturn(Optional.of(parentComment))
 
         assertThatThrownBy { commentService.updateComment(101L, requestDTO) }
-            .isInstanceOf(ServiceException::class.java)
-            .hasMessage("댓글 수정 권한이 없습니다.")
+                .isInstanceOf(ServiceException::class.java)
+                .hasMessage("댓글 수정 권한이 없습니다.")
     }
 
     @Test
@@ -148,13 +170,15 @@ class CommentServiceTest {
     @Test
     @DisplayName("댓글 삭제 실패 - 권한 없음")
     fun `delete comment fail - no permission`() {
-        val otherUser = Member.builder().id(2L).build()
+        val otherUser = Member().apply {
+            id = 2L
+        }
         whenever(rq.getActor()).thenReturn(otherUser)
         whenever(commentRepository.findById(101L)).thenReturn(Optional.of(parentComment))
 
         assertThatThrownBy { commentService.deleteComment(101L) }
-            .isInstanceOf(ServiceException::class.java)
-            .hasMessage("댓글 삭제 권한이 없습니다.")
+                .isInstanceOf(ServiceException::class.java)
+                .hasMessage("댓글 삭제 권한이 없습니다.")
         verify(commentRepository, never()).delete(any())
     }
 }
