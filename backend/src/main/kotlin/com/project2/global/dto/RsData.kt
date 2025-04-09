@@ -9,6 +9,7 @@ data class RsData<T>(
         val msg: String,
         val data: T
 ) {
+    @Suppress("UNCHECKED_CAST")
     constructor(code: String, msg: String) : this(code, msg, Empty() as T)
 
     @get:JsonIgnore

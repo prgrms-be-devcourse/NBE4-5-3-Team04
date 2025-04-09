@@ -24,19 +24,19 @@ class CustomOauth2UserService(
 
         val attributes = oAuth2User.attributes
 
-        var nickname = ""
-        var profileImage = ""
-        var email = ""
-
-        if (provider == Provider.NAVER) {
-            val response = attributes["response"] as Map<String, Any>
-            nickname = response["nickname"] as String
-            profileImage = response["profile_image"] as String
-            email = response["email"] as String
+        val (nickname, profileImage, email) = if (provider == Provider.NAVER) {
+            val response = attributes["response"] as Map<*, *>
+            Triple(
+                    response["nickname"] as String,
+                    response["profile_image"] as String,
+                    response["email"] as String
+            )
         } else {
-            nickname = attributes["name"] as String
-            profileImage = attributes["picture"] as String
-            email = attributes["email"] as String
+            Triple(
+                    attributes["name"] as String,
+                    attributes["picture"] as String,
+                    attributes["email"] as String
+            )
         }
 
         val opMember = memberService.findByEmail(email)

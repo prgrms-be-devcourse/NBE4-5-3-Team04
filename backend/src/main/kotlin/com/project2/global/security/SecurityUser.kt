@@ -13,6 +13,7 @@ class SecurityUser(
 
     constructor(member: Member) : this(member.id!!, member.email, member.getAuthorities())
 
+    @Suppress("UNCHECKED_CAST")
     override fun <A> getAttribute(name: String): A? {
         return attributes[name] as A? // return OAuth2User.super.getAttribute(name); <- 기존 java 코드
     }
