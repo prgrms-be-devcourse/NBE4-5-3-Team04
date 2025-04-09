@@ -1,6 +1,5 @@
 package com.project2.domain.chat.service
 
-import com.project2.domain.chat.dto.ChatRoomResponseDTO
 import com.project2.domain.chat.entity.ChatMessage
 import com.project2.domain.chat.entity.ChatRoom
 import com.project2.domain.chat.repository.ChatMessageRepository
@@ -11,7 +10,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.data.domain.PageImpl
@@ -91,7 +89,6 @@ class ChatServiceTest {
 
         // then
         assertEquals(2, result.size)
-        assertTrue(result.all { it is ChatRoomResponseDTO })
     }
 
     @Test

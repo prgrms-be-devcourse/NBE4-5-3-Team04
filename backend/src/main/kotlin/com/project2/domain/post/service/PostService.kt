@@ -30,7 +30,7 @@ class PostService(
     @Transactional(rollbackFor = [Exception::class])
     @Throws(IOException::class)
     fun createPost(requestDTO: PostRequestDTO): Long {
-        val actor = rq.actor
+        val actor = rq.getActor()
 
         val placeId = requestDTO.placeId!!
         val latitude = requestDTO.latitude!!

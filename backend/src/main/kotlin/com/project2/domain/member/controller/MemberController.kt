@@ -31,7 +31,7 @@ class MemberController(
     @Operation(summary = "내 정보 조회")
     @GetMapping("/me")
     fun me(): RsData<MemberDTO> {
-        val actor = rq.actor
+        val actor = rq.getActor()
         val realActor = rq.getRealActor(actor)
         return RsData("200", "내 정보 조회가 완료되었습니다.", MemberDTO.from(realActor))
     }

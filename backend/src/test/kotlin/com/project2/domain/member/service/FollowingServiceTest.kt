@@ -46,7 +46,7 @@ class FollowingServiceTest {
     @Test
     fun testGetFollowings_Success() {
         // Given
-        Mockito.`when`(rq.actor).thenReturn(user)
+        Mockito.`when`(rq.getActor()).thenReturn(user)
         Mockito.`when`(memberService.findByIdOrThrow(1L)).thenReturn(user)
 
         val follow1 = Follows(null, user, following1)
@@ -77,7 +77,7 @@ class FollowingServiceTest {
     @Test
     fun testGetFollowings_NoFollowings() {
         // Given
-        Mockito.`when`(rq.actor).thenReturn(user)
+        Mockito.`when`(rq.getActor()).thenReturn(user)
         Mockito.`when`(memberService.findByIdOrThrow(1L)).thenReturn(user)
         Mockito.`when`(followRepository.findByFollower(user)).thenReturn(mutableListOf())
 
@@ -92,7 +92,7 @@ class FollowingServiceTest {
     @Test
     fun testGetFollowings_UserNotFound() {
         // Given
-        Mockito.`when`(rq.actor).thenReturn(user)
+        Mockito.`when`(rq.getActor()).thenReturn(user)
         Mockito.`when`(memberService.findByIdOrThrow(1L)).thenThrow(ServiceException("404", "사용자를 찾을 수 없습니다."))
 
         // When & Then
@@ -107,7 +107,7 @@ class FollowingServiceTest {
         Assertions.assertEquals("사용자를 찾을 수 없습니다.", exception.message)
 
         // Verify interactions
-        Mockito.verify(rq).actor
+        Mockito.verify(rq).getActor()
         Mockito.verify(memberService)?.findByIdOrThrow(1L)
     }
 
