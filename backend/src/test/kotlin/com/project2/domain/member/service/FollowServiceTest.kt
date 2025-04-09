@@ -57,13 +57,13 @@ class FollowServiceTest {
     @DisplayName("팔로우 성공")
     fun testToggleFollow_Success_Follow() {
         // given
-        Mockito.`when`(rq.actor).thenReturn(follower)
+        Mockito.`when`(rq.getActor()).thenReturn(follower)
         Mockito.`when`(
-            following.id?.let {
-                memberRepository.findById(
-                    it
-                )
-            }).thenReturn(Optional.of(following)) // following.getId() 사용
+                following.id?.let {
+                    memberRepository.findById(
+                            it
+                    )
+                }).thenReturn(Optional.of(following)) // following.getId() 사용
 //        Mockito.`when`(followRepository!!.findByFollowerAndFollowing(follower, following)).thenReturn(Optional.empty())
         val savedFollow = Follows(1L, follower, following)
         Mockito.`when`(followRepository.save(ArgumentMatchers.any(Follows::class.java))).thenReturn(savedFollow)
@@ -81,7 +81,7 @@ class FollowServiceTest {
     fun testToggleFollow_Success_Unfollow() {
         // 1. Given (준비)
         //   - 현재 사용자(follower) 설정
-        Mockito.`when`(rq.actor).thenReturn(follower)
+        Mockito.`when`(rq.getActor()).thenReturn(follower)
 
         //   - requestDto에 followingId 설정
         requestDto.followingId = following.id!!
