@@ -41,10 +41,10 @@ class Rq(
             throw ServiceException("401-3", "잘못된 인증 정보입니다")
         }
 
-        return Member.builder()
-                .id(principal.id)
-                .email(principal.username)
-                .build()
+        return Member().apply {
+            id = principal.id
+            email = principal.username
+        }
     }
 
     fun getHeader(name: String): String? {
