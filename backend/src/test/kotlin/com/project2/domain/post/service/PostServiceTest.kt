@@ -60,8 +60,15 @@ class PostServiceTest {
         // given
         val member = Member()
         member.id = 1L
-        val place = Place()
-        place.id = 1L
+        val place = Place(
+            id = 1L,
+            name = "테스트 장소",
+            latitude = 37.5665,
+            longitude = 126.9780,
+            region = Region.SEOUL,
+            category = Category.CE7,
+            posts = mutableListOf()
+        )
         val requestDTO = PostRequestDTO()
         requestDTO.title = "테스트 제목"
         requestDTO.content = "테스트 내용"
