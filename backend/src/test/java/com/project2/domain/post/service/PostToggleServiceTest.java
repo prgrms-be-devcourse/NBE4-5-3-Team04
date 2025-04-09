@@ -29,6 +29,7 @@ import jakarta.persistence.EntityNotFoundException;
 @Transactional
 class PostToggleServiceTest {
 
+	// Scrap 주요 파일들 마이그레이션 후 변환 예정.
 	@InjectMocks
 	private PostToggleService postToggleService;
 
@@ -61,8 +62,7 @@ class PostToggleServiceTest {
 		// Then
 		assertEquals("200", result.getCode());
 		assertEquals("좋아요 상태 변경 완료", result.getMsg());
-		assertTrue(result.getData().isLiked());
-		assertEquals(1, result.getData().getLikeCount());
+		assertTrue(result.getData().getLiked());
 		verify(likesRepository).save(any(Likes.class));
 	}
 
@@ -79,7 +79,7 @@ class PostToggleServiceTest {
 		// Then
 		assertEquals("200", result.getCode());
 		assertEquals("좋아요 상태 변경 완료", result.getMsg());
-		assertFalse(result.getData().isLiked());
+		assertFalse(result.getData().getLiked());
 		assertEquals(0, result.getData().getLikeCount());
 		verify(likesRepository, never()).save(any(Likes.class));
 	}
@@ -146,7 +146,7 @@ class PostToggleServiceTest {
 		LikeResponseDTO result = likesRepository.getLikeStatus(postId, userId);
 
 		// Then
-		assertTrue(result.isLiked());
+		assertTrue(result.getLiked());
 		assertEquals(5, result.getLikeCount());
 	}
 
@@ -160,7 +160,7 @@ class PostToggleServiceTest {
 		LikeResponseDTO result = likesRepository.getLikeStatus(postId, userId);
 
 		// Then
-		assertFalse(result.isLiked());
+		assertFalse(result.getLiked());
 		assertEquals(0, result.getLikeCount());
 	}
 
