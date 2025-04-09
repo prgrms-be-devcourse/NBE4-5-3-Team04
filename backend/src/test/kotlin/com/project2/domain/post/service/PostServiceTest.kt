@@ -72,7 +72,7 @@ class PostServiceTest {
         requestDTO.region = Region.SEOUL.name
         requestDTO.category = Category.CE7.name
 
-        every { rq.actor } returns member
+        every { rq.getActor() } returns member
         every { placeRepository.findById(any()) } returns Optional.of(place)
         every { postRepository.save(any()) } returns Post().apply { id = 1L }
 
