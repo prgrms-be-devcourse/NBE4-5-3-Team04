@@ -22,6 +22,7 @@ class FollowController(
     private val followService: FollowService,
     private val followerService: FollowerService,
     private val followingService: FollowingService,
+
 ) {
     @PostMapping("/{memberid}/follows")
     fun toggleFollow(
@@ -49,6 +50,7 @@ class FollowController(
     }
 
     @GetMapping("/{memberId}/followings")
+
     fun getFollowings(@PathVariable memberId: Long): ResponseEntity<RsData<List<FollowerResponseDto>>> {
         try {
             val followings = followingService.getFollowings(memberId)
