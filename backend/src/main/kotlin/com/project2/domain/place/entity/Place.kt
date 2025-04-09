@@ -9,17 +9,17 @@ import jakarta.persistence.*
 @Entity
 class Place(
     @Id
-    @Column(name = "id")
-    var id: Long? = null,
+    @Column(name = "id", nullable = false)
+    var id: Long,
 
     @Column(nullable = false)
-    var name: String? = null,
+    var name: String,
 
     @Column(nullable = false)
-    var latitude: Double? = null,
+    var latitude: Double,
 
     @Column(nullable = false)
-    var longitude: Double? = null,
+    var longitude: Double,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
