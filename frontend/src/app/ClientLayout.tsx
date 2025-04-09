@@ -279,7 +279,7 @@ export default function ClientLayout({
             // 수정된 클래스
             className={`fixed top-14 bottom-0 left-0 transform ${
               mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-            } lg:translate-x-0 w-48 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out lg:static lg:h-auto z-30`}
+            } lg:translate-x-0 w-48 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out lg:static lg:min-h-screen z-30`}
           >
             <div className="lg:hidden absolute top-4 right-4">
               <button
