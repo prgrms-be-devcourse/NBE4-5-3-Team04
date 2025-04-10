@@ -1,9 +1,11 @@
-package com.project2.domain.member.service
+package com.project2.domain.member.unit.service
 
 import com.project2.domain.member.dto.FollowerResponseDto
 import com.project2.domain.member.entity.Follows
 import com.project2.domain.member.entity.Member
 import com.project2.domain.member.repository.FollowRepository
+import com.project2.domain.member.service.FollowingService
+import com.project2.domain.member.service.MemberService
 import com.project2.global.exception.ServiceException
 import com.project2.global.security.Rq
 import org.junit.jupiter.api.Assertions
