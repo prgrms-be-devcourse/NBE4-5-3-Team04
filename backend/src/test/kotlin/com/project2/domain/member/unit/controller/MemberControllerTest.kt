@@ -1,5 +1,6 @@
-package com.project2.domain.member.controller
+package com.project2.domain.member.unit.controller
 
+import com.project2.domain.member.controller.MemberController
 import com.project2.domain.member.entity.Member
 import com.project2.domain.member.enums.Provider
 import com.project2.domain.member.service.*
@@ -60,7 +61,7 @@ class MemberControllerTest {
             provider = Provider.NAVER
             createdDate = LocalDateTime.now()
         }
-        
+
         actor = SecurityUser(mockMember)
 
         val context = SecurityContextHolder.createEmptyContext()

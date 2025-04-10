@@ -1,7 +1,9 @@
-package com.project2.domain.member.service
+package com.project2.domain.member.unit.service
 
 import com.project2.domain.member.entity.Member
 import com.project2.domain.member.repository.MemberRepository
+import com.project2.domain.member.service.AuthService
+import com.project2.domain.member.service.AuthTokenService
 import com.project2.global.exception.ServiceException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

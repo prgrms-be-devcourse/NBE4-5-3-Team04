@@ -1,10 +1,11 @@
-package com.project2.domain.member.service
+package com.project2.domain.member.unit.service
 
 import com.project2.domain.member.dto.FollowRequestDto
 import com.project2.domain.member.entity.Follows
 import com.project2.domain.member.entity.Member
 import com.project2.domain.member.repository.FollowRepository
 import com.project2.domain.member.repository.MemberRepository
+import com.project2.domain.member.service.FollowService
 import com.project2.global.security.Rq
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -88,16 +89,16 @@ class FollowServiceTest {
 
         //   - 팔로잉 설정 (memberRepository.findById() 스텁)
         Mockito.`when`(
-            following.id?.let {
-                memberRepository.findById(
-                    it
-                )
-            }).thenReturn(Optional.of(following))
+                following.id?.let {
+                    memberRepository.findById(
+                            it
+                    )
+                }).thenReturn(Optional.of(following))
 
         //   - 팔로우 관계가 이미 존재하는 경우 설정
         val existingFollow = Follows(1L, follower, following)
         Mockito.`when`(followRepository.findByFollowerAndFollowing(follower, following))
-            .thenReturn(Optional.of(existingFollow))
+                .thenReturn(Optional.of(existingFollow))
 
         // 2. When (실행)
         //   - toggleFollow 메서드 실행

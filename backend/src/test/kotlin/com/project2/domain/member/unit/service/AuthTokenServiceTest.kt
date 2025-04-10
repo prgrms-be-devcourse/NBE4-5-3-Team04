@@ -1,7 +1,8 @@
-package com.project2.domain.member.service
+package com.project2.domain.member.unit.service
 
 import com.project2.domain.member.entity.Member
 import com.project2.domain.member.enums.Provider
+import com.project2.domain.member.service.AuthTokenService
 import com.project2.global.util.Ut
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
