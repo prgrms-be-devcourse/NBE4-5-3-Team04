@@ -19,7 +19,7 @@ class PostToggleController(
     @PostMapping("/{postId}/likes")
     fun toggleLike(
         @AuthenticationPrincipal securityUser: SecurityUser,
-        @PathVariable postId: Long?
+        @PathVariable postId: Long
     ): RsData<LikeResponseDTO> {
         return postToggleService.toggleLikes(securityUser.id, postId)
     }
@@ -27,7 +27,7 @@ class PostToggleController(
     @PostMapping("/{postId}/scrap")
     fun toggleScrap(
         @AuthenticationPrincipal securityUser: SecurityUser,
-        @PathVariable postId: Long?
+        @PathVariable postId: Long
     ): RsData<ScrapResponseDTO> {
         return postToggleService.toggleScrap(securityUser.id, postId!!)
     }
@@ -35,7 +35,7 @@ class PostToggleController(
     @PostMapping("/{postId}/follow")
     fun toggleFollow(
         @AuthenticationPrincipal securityUser: SecurityUser,
-        @PathVariable postId: Long?,
+        @PathVariable postId: Long ,
         @RequestBody requestDto: FollowRequestDto
     ): RsData<FollowResponseDto> {
         // 현재 로그인한 사용자의 ID를 followerId로 설정
