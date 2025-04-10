@@ -22,7 +22,6 @@ class FollowController(
     private val followService: FollowService,
     private val followerService: FollowerService,
     private val followingService: FollowingService,
-
 ) {
     @PostMapping("/{memberid}/follows")
     fun toggleFollow(
@@ -35,40 +34,28 @@ class FollowController(
     @GetMapping("/{memberId}/followers")
     fun getFollowers(
         @PathVariable memberId: Long, @PageableDefault(size = 8) pageable: Pageable
-    ): ResponseEntity<RsData<Page<FollowerResponseDto>>> {
-        val followers = memberId.let { followerService.getFollowers(it, pageable) }
+    ): RsData<Page<FollowerResponseDto>> {
+        val followers = followerService.getFollowers(memberId, pageable)
 
-        if (followers.isEmpty) {
-            return ResponseEntity.noContent().build()
+        return if (followers.isEmpty) {
+            RsData("204", "팔로워가 없습니다.") // No Content
+        } else {
+            RsData("200", "팔로워 목록이 성공적으로 조회되었습니다.", followers)
         }
-
-        return ResponseEntity.ok(
-            RsData(
-                "200", "팔로워 목록이 성공적으로 조회되었습니다.", followers
-            )
-        )
     }
 
     @GetMapping("/{memberId}/followings")
-
-    fun getFollowings(@PathVariable memberId: Long): ResponseEntity<RsData<List<FollowerResponseDto>>> {
-        try {
+    fun getFollowings(@PathVariable memberId: Long): RsData<List<FollowerResponseDto>> {
+        return try {
             val followings = followingService.getFollowings(memberId)
 
-            // Check if the list of followings is empty
             if (followings.isEmpty()) {
-                return ResponseEntity.noContent().build()
+                RsData("204", "팔로잉이 없습니다.") // No Content
+            } else {
+                RsData("200", "팔로잉 목록이 성공적으로 조회되었습니다.", followings)
             }
-
-            return ResponseEntity.ok(
-                RsData(
-                    "200", "팔로잉 목록이 성공적으로 조회되었습니다.", followings
-                )
-            )
         } catch (e: ServiceException) {
-            return ResponseEntity.noContent().build()
+            RsData("500", "팔로잉 조회 중 오류가 발생했습니다.")
         }
     }
-
-
 }
