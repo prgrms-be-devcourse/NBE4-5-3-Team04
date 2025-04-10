@@ -25,13 +25,13 @@ class PostToggleService(
     private val memberRepository: MemberRepository
 ) {
     @Transactional
-    fun toggleLikes(userId: Long?, postId: Long?): RsData<LikeResponseDTO> {
+    fun toggleLikes(userId: Long, postId: Long): RsData<LikeResponseDTO> {
         val isLiked = likesRepository.existsByPostIdAndMemberId(postId, userId)
 
         if (isLiked) {
             likesRepository.toggleLikeIfExists(postId, userId)
         } else {
-            likesRepository.save(toggleMapper.toLikes(userId!!, postId!!))
+            likesRepository.save(toggleMapper.toLikes(userId, postId))
         }
 
         val responseDTO = LikeResponseDTO(!isLiked, likesRepository.countByPostId(postId))
@@ -39,14 +39,14 @@ class PostToggleService(
     }
 
     @Transactional
-    fun toggleScrap(userId: Long?, postId: Long): RsData<ScrapResponseDTO> {
+    fun toggleScrap(userId: Long, postId: Long): RsData<ScrapResponseDTO> {
         val isScrapped = scrapRepository.existsByPostIdAndMemberId(postId, userId)
 
         if (isScrapped) {
             scrapRepository.toggleScrapIfExists(postId, userId)
         } else {
             val post = postRepository.getReferenceById(postId)
-            scrapRepository.save(toggleMapper.toScrap(userId!!, post))
+            scrapRepository.save(toggleMapper.toScrap(userId, post))
         }
 
         val responseDTO = ScrapResponseDTO(!isScrapped, scrapRepository.countByPostId(postId))
@@ -58,17 +58,14 @@ class PostToggleService(
         val followerId = requestDto.followerId
         val followingId = requestDto.followingId
 
-        val follower = memberRepository.findById(followerId)
-            .orElseThrow { IllegalArgumentException("팔로워를 찾을 수 없습니다.") }
-        val following = memberRepository.findById(followingId)
-            .orElseThrow { IllegalArgumentException("팔로잉 사용자를 찾을 수 없습니다.") }
+        val follower = memberRepository.findById(followerId).orElseThrow { IllegalArgumentException("팔로워를 찾을 수 없습니다.") }
+        val following =
+            memberRepository.findById(followingId).orElseThrow { IllegalArgumentException("팔로잉 사용자를 찾을 수 없습니다.") }
 
         val isFollowing = followRepository.existsByFollowerAndFollowing(follower, following)
 
         val follows = Follows(
-            id = null,
-            follower = follower,
-            following = following
+            id = null, follower = follower, following = following
         )
 
         if (isFollowing) {
