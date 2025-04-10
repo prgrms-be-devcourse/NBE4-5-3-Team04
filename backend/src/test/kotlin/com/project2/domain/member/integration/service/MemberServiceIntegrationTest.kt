@@ -16,8 +16,10 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Primary
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 
+@ActiveProfiles("test")
 @SpringBootTest
 @Transactional
 @Import(MemberServiceIntegrationTest.MockImageServiceConfig::class)
@@ -47,7 +49,7 @@ class MemberServiceIntegrationTest {
         val nickname = "테스트유저"
         val imageUrl = "https://cdn.example.com/image.jpg"
         val provider = Provider.GOOGLE
-        
+
         whenever(imageService.downloadProfileImage(eq(imageUrl), any()))
                 .thenReturn("/images/test-profile.png")
 
