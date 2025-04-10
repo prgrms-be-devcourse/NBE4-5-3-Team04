@@ -18,8 +18,7 @@ class NotificationController(
     @GetMapping
     fun getUnreadNotifications(): RsData<List<NotificationResponseDTO>> {
         val actor = rq.getActor()
-        val notifications = notificationService.getUnreadNotifications(actor.id!!)
-        val responseDTO = notifications.map { NotificationResponseDTO.from(it) }
+        val responseDTO = notificationService.getUnreadNotificationsDTO(actor.id!!)
         return RsData("200", "알림 목록을 성공적으로 조회했습니다.", responseDTO)
     }
 
@@ -30,7 +29,7 @@ class NotificationController(
     }
 
     @GetMapping("/subscribe")
-    fun subscribe(@RequestParam userId: Long): SseEmitter {
-        return sseService.subscribe(userId)
+    fun subscribe(@RequestParam memberId: Long): SseEmitter {
+        return sseService.subscribe(memberId)
     }
 }

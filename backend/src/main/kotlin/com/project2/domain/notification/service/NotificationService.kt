@@ -1,11 +1,12 @@
 package com.project2.domain.notification.service
 
-import com.project2.domain.member.entity.Member
+import com.project2.domain.notification.dto.NotificationEventDTO
 import com.project2.domain.notification.dto.NotificationResponseDTO
 import com.project2.domain.notification.entity.Notification
-import com.project2.domain.notification.enums.NotificationType
+import com.project2.domain.notification.event.NotificationEvent
 import com.project2.domain.notification.repository.NotificationRepository
 import com.project2.global.service.SseService
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,38 +15,16 @@ class NotificationService(
         private val notificationRepository: NotificationRepository,
         private val sseService: SseService
 ) {
-    @Transactional
-    fun createNotification(
-            receiver: Member,
-            sender: Member,
-            type: NotificationType,
-            content: String,
-            relatedId: Long
-    ): Notification {
-        val notification = Notification(
-                receiver = receiver,
-                sender = sender,
-                type = type,
-                content = content,
-                relatedId = relatedId
-        )
-        val savedNotification = notificationRepository.save(notification)
-
-        // SSE를 통해 실시간 알림 전송
-        try {
-            val responseDTO = NotificationResponseDTO.from(savedNotification)
-            sseService.sendToUser(receiver.id!!, responseDTO)
-        } catch (e: Exception) {
-            // SSE 전송 실패 예외 처리 (알림 저장은 성공했으므로 로그만 출력)
-            println("알림 전송 실패: ${e.message}")
-        }
-
-        return savedNotification
-    }
 
     @Transactional(readOnly = true)
     fun getUnreadNotifications(memberId: Long): List<Notification> {
         return notificationRepository.findByReceiverIdAndReadFalseOrderByCreatedDateDesc(memberId)
+    }
+
+    @Transactional(readOnly = true)
+    fun getUnreadNotificationsDTO(memberId: Long): List<NotificationResponseDTO> {
+        val notifications = getUnreadNotifications(memberId)
+        return notifications.map { NotificationResponseDTO.from(it) }
     }
 
     @Transactional
@@ -53,5 +32,33 @@ class NotificationService(
         val notification = notificationRepository.findById(notificationId).orElseThrow()
         notification.read = true
         notificationRepository.save(notification)
+    }
+
+    /**
+     * 비동기로 알림 이벤트 처리
+     * @param event 알림 이벤트
+     */
+    @Async
+    @Transactional
+    fun processNotificationAsync(event: NotificationEvent) {
+        try {
+            // 알림 엔티티 생성 및 저장
+            val notification = Notification(
+                    sender = event.sender,
+                    receiver = event.receiver,
+                    content = event.content,
+                    type = event.type,
+                    relatedId = event.relatedId
+            )
+            val savedNotification = notificationRepository.save(notification)
+            println("알림 저장 성공: ${savedNotification.id}")
+
+            // NotificationEventDTO로 변환하여 SSE 메시지 전송
+            val eventDTO = NotificationEventDTO.from(event)
+            sseService.sendToUser(event.receiver.id!!, eventDTO)
+        } catch (e: Exception) {
+            println("알림 처리 중 오류 발생: ${e.message}")
+            e.printStackTrace()
+        }
     }
 }
