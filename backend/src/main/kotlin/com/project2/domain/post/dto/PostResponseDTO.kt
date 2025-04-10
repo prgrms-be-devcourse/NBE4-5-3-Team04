@@ -12,7 +12,7 @@ class PostResponseDTO(
     val id: Long = post.id!!
     val title: String = post.title
     val content: String = post.content
-    val placeDTO: PlaceDTO = PlaceDTO(post.place.name, post.place.krCategory)
+    val placeDTO: PlaceDTO = PlaceDTO(post.place.name!!, post.place.krCategory)
     val likeCount: Int = post.likes.size
     val isLiked: Boolean = post.likes.any { it.member.id == actor.id }
     val scrapCount: Int = post.scraps.size

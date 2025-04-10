@@ -15,7 +15,12 @@ class MemberService(private val memberRepository: MemberRepository, private val 
 
     @Transactional
     fun signUp(email: String, nickname: String, profileImage: String, provider: Provider): Member {
-        val member = memberRepository.save(Member.builder().email(email).nickname(nickname).provider(provider).profileImageUrl("").build())
+        val member = memberRepository.save(Member().apply {
+            this.email = email
+            this.nickname = nickname
+            this.provider = provider
+            this.profileImageUrl = ""
+        })
 
         val profileImagePath = imageService.downloadProfileImage(profileImage, member.id!!)
         member.profileImageUrl = profileImagePath

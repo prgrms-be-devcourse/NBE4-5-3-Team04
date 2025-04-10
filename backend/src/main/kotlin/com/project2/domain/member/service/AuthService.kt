@@ -19,10 +19,10 @@ class AuthService(
         val email = payload["email"] as String
 
         return Optional.of(
-                Member.builder()
-                        .id(id)
-                        .email(email)
-                        .build()
+                Member().apply {
+                    this.id = id
+                    this.email = email
+                }
         )
     }
 

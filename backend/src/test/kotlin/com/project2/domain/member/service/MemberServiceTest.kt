@@ -21,10 +21,10 @@ import java.util.*
 @ExtendWith(MockitoExtension::class)
 class MemberServiceTest {
 
-    private val email = "test@example.com"
-    private val nickname = "TestUser"
-    private val profileImageUrl = "/profile.jpg"
-    private val provider = Provider.GOOGLE
+    private val testEmail = "test@example.com"
+    private val testNickname = "TestUser"
+    private val testProvider = Provider.GOOGLE
+    private val testProfileImageUrl = "/profile.jpg"
 
     @Mock
     private lateinit var memberRepository: MemberRepository
@@ -40,13 +40,13 @@ class MemberServiceTest {
 
     @BeforeEach
     fun setUp() {
-        mockMember = Member.builder()
-                .id(1L)
-                .email(email)
-                .nickname(nickname)
-                .provider(provider)
-                .profileImageUrl(profileImageUrl)
-                .build()
+        mockMember = Member().apply {
+            id = 1L
+            email = testEmail
+            nickname = testNickname
+            provider = testProvider
+            profileImageUrl = testProfileImageUrl
+        }
 
         actor = SecurityUser(mockMember)
     }
@@ -55,15 +55,15 @@ class MemberServiceTest {
     @DisplayName("로그인을 수행된다.")
     fun `member exists - returns existing member`() {
         // Given
-        `when`(memberRepository.findByEmail(email)).thenReturn(Optional.of(mockMember))
+        `when`(memberRepository.findByEmail(testEmail)).thenReturn(Optional.of(mockMember))
 
         // When
-        val result = memberService.findByEmail(email)
+        val result = memberService.findByEmail(testEmail)
 
         // Then
         assertThat(result).isPresent
-        assertThat(result.get().email).isEqualTo(email)
-        assertThat(result.get().nickname).isEqualTo(nickname)
+        assertThat(result.get().email).isEqualTo(testEmail)
+        assertThat(result.get().nickname).isEqualTo(testNickname)
 
         verify(memberRepository, never()).save(any(Member::class.java))
     }
@@ -77,12 +77,12 @@ class MemberServiceTest {
         `when`(memberRepository.save(any(Member::class.java))).thenReturn(mockMember)
 
         // When
-        val result = memberService.signUp(email, nickname, profileImageUrl, provider)
+        val result = memberService.signUp(testEmail, testNickname, testProfileImageUrl, testProvider)
 
         // Then
         assertThat(result).isNotNull
-        assertThat(result.email).isEqualTo(email)
-        assertThat(result.provider).isEqualTo(provider)
+        assertThat(result.email).isEqualTo(testEmail)
+        assertThat(result.provider).isEqualTo(testProvider)
         assertThat(result.profileImageUrl).isEqualTo(mockedPath)
 
         verify(memberRepository).save(any(Member::class.java))

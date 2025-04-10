@@ -42,10 +42,10 @@ class AuthServiceTest {
         injectValue(authTokenService, "accessTokenExpireSeconds", 3600)
         injectValue(authTokenService, "refreshTokenExpireSeconds", 7200)
 
-        mockMember = Member.builder()
-                .id(1L)
-                .email("test@example.com")
-                .build()
+        mockMember = Member().apply {
+            id = 1L
+            email = "test@example.com"
+        }
     }
 
     private fun injectValue(target: Any, fieldName: String, value: Any) {

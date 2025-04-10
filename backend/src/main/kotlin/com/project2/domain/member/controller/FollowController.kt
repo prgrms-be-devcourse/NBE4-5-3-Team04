@@ -33,12 +33,13 @@ class FollowController(
 
     @GetMapping("/{memberId}/followers")
     fun getFollowers(
-        @PathVariable memberId: Long, @PageableDefault(size = 8) pageable: Pageable
+        @PathVariable memberId: Long,
+        @PageableDefault(size = 8) pageable: Pageable
     ): RsData<Page<FollowerResponseDto>> {
         val followers = followerService.getFollowers(memberId, pageable)
 
         return if (followers.isEmpty) {
-            RsData("204", "팔로워가 없습니다.") // No Content
+            RsData("204", "팔로워가 없습니다.")
         } else {
             RsData("200", "팔로워 목록이 성공적으로 조회되었습니다.", followers)
         }
@@ -46,16 +47,12 @@ class FollowController(
 
     @GetMapping("/{memberId}/followings")
     fun getFollowings(@PathVariable memberId: Long): RsData<List<FollowerResponseDto>> {
-        return try {
-            val followings = followingService.getFollowings(memberId)
+        val followings = followingService.getFollowings(memberId)
 
-            if (followings.isEmpty()) {
-                RsData("204", "팔로잉이 없습니다.") // No Content
-            } else {
-                RsData("200", "팔로잉 목록이 성공적으로 조회되었습니다.", followings)
-            }
-        } catch (e: ServiceException) {
-            RsData("500", "팔로잉 조회 중 오류가 발생했습니다.")
+        return if (followings.isEmpty()) {
+            RsData("204", "팔로잉이 없습니다.")
+        } else {
+            RsData("200", "팔로잉 목록이 성공적으로 조회되었습니다.", followings)
         }
     }
 }

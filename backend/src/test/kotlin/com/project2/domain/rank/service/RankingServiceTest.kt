@@ -48,24 +48,23 @@ class RankingServiceTest {
 
     @BeforeEach
     fun setUp() {
-        mockPlace1 = Place().apply {
-            id = 1L
-            name = "인기 장소 1"
-            latitude = 0.0
-            longitude = 0.0
-            region = Region.SEOUL
+        mockPlace1 = Place(
+            id = 1L,
+            name = "인기 장소 1",
+            latitude = 0.0,
+            longitude = 0.0,
+            region = Region.SEOUL,
             category = Category.ETC
-            posts = mutableListOf()
-        }
-        mockPlace2 = Place().apply {
-            id = 2L
-            name = "다른 장소"
-            latitude = 0.0
-            longitude = 0.0
-            region = Region.BUSAN
+        )
+
+        mockPlace2 = Place(
+            id = 2L,
+            name = "다른 장소",
+            latitude = 0.0,
+            longitude = 0.0,
+            region = Region.BUSAN,
             category = Category.ETC
-            posts = mutableListOf()
-        }
+        )
         mockMember = Member().apply { id = 1L }
         mockPost1 = Post().apply {
             id = 10L
