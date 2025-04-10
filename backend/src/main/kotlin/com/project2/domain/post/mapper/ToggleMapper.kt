@@ -18,12 +18,8 @@ class ToggleMapper {
         }
     }
 
-    // Scrap 관련 코드들은 해당 기능 변환 때 다시 수정 예정
     fun toScrap(userId: Long, post: Post): Scrap {
         val member = Member().apply { id = userId }
-        return Scrap().apply {
-            this.post = post
-            this.member = member
-        }
+        return Scrap(post = post, member = member)
     }
 }
