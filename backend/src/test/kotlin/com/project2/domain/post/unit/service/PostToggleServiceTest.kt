@@ -1,4 +1,4 @@
-package com.project2.domain.post.service
+package com.project2.domain.post.unit.service
 
 import com.project2.domain.member.entity.Member
 import com.project2.domain.post.dto.toggle.LikeResponseDTO
@@ -12,6 +12,7 @@ import com.project2.domain.post.repository.PostRepository
 import com.project2.domain.post.repository.ScrapRepository
 import com.project2.domain.member.repository.FollowRepository
 import com.project2.domain.member.repository.MemberRepository
+import com.project2.domain.post.service.PostToggleService
 import jakarta.persistence.EntityNotFoundException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName

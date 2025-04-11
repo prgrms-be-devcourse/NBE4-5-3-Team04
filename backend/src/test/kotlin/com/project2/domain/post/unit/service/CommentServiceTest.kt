@@ -1,4 +1,4 @@
-package com.project2.domain.post.service
+package com.project2.domain.post.unit.service
 
 import com.project2.domain.member.entity.Member
 import com.project2.domain.member.repository.MemberRepository
@@ -9,6 +9,7 @@ import com.project2.domain.post.entity.Post
 import com.project2.domain.post.mapper.CommentMapper
 import com.project2.domain.post.repository.CommentRepository
 import com.project2.domain.post.repository.PostRepository
+import com.project2.domain.post.service.CommentService
 import com.project2.global.exception.ServiceException
 import com.project2.global.security.Rq
 import org.assertj.core.api.Assertions.assertThat

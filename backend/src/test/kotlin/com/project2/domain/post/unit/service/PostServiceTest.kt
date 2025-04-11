@@ -1,4 +1,4 @@
-package com.project2.domain.post.service
+package com.project2.domain.post.unit.service
 
 import com.project2.domain.member.entity.Member
 import com.project2.domain.place.entity.Place
@@ -9,6 +9,8 @@ import com.project2.domain.place.service.PlaceService
 import com.project2.domain.post.dto.PostRequestDTO
 import com.project2.domain.post.entity.Post
 import com.project2.domain.post.repository.PostRepository
+import com.project2.domain.post.service.PostImageService
+import com.project2.domain.post.service.PostService
 import com.project2.global.exception.ServiceException
 import com.project2.global.security.Rq
 import com.project2.global.security.SecurityUser
