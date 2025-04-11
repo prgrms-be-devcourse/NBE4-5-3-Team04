@@ -8,6 +8,7 @@ import com.project2.domain.notification.service.NotificationService
 import com.project2.domain.post.dto.comment.CommentRequestDTO
 import com.project2.domain.post.dto.comment.CommentResponseDTO
 import com.project2.domain.post.dto.comment.ListCommentResponseDTO
+import com.project2.domain.post.entity.Comment
 import com.project2.domain.post.mapper.CommentMapper
 import com.project2.domain.post.repository.CommentRepository
 import com.project2.domain.post.repository.PostRepository
@@ -15,7 +16,6 @@ import com.project2.global.dto.Empty
 import com.project2.global.dto.RsData
 import com.project2.global.exception.ServiceException
 import com.project2.global.security.Rq
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -26,7 +26,6 @@ class CommentService(
 		private val postRepository: PostRepository,
 		private val commentMapper: CommentMapper,
 		private val rq: Rq,
-		private val applicationEventPublisher: ApplicationEventPublisher,
 		private val notificationService: NotificationService
 ) {
 
@@ -64,7 +63,7 @@ class CommentService(
 		// 대댓글인 경우 추가 알림 생성
 		if (parentComment != null) {
 			// 대댓글이 달릴 때 원 댓글 작성자에게 알림
-			notifyReply(member, parentComment, comment, request.content)
+			notifyReply(member, parentComment, request.content)
 		}
 
 		return RsData("200", "댓글이 성공적으로 작성되었습니다.", responseDTO)
@@ -120,13 +119,13 @@ class CommentService(
 	}
 
 	// 대댓글 알림 처리를 위한 별도 메서드
-	private fun notifyReply(member: Member, parentComment: com.project2.domain.post.entity.Comment, comment: com.project2.domain.post.entity.Comment, content: String) {
+	private fun notifyReply(member: Member, parentComment: Comment, content: String) {
 		// 비동기로 알림 처리
 		val event = NotificationEvent(
 				receiver = parentComment.member,
 				sender = member,
 				type = NotificationType.NEW_REPLY,
-				content = "${member.nickname}님이 대댓글에 댓글을 달았습니다: ${content}",
+				content = "${member.nickname}님이 댓글에 대댓글을 달았습니다: $content",
 				relatedId = parentComment.post.id!!  // 댓글 ID 대신 게시글 ID 사용
 		)
 		// 비동기 처리를 위해 notificationService 사용
