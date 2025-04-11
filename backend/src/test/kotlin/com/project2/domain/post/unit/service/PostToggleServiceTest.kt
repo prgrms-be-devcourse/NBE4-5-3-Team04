@@ -3,6 +3,8 @@ package com.project2.domain.post.unit.service
 import com.project2.domain.member.entity.Member
 import com.project2.domain.member.repository.FollowRepository
 import com.project2.domain.member.repository.MemberRepository
+import com.project2.domain.notification.event.NotificationEvent
+import com.project2.domain.notification.service.NotificationService
 import com.project2.domain.post.dto.toggle.LikeResponseDTO
 import com.project2.domain.post.dto.toggle.ScrapResponseDTO
 import com.project2.domain.post.entity.Likes
@@ -29,25 +31,28 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 internal class PostToggleServiceTest {
     @InjectMocks
-    private val postToggleService: PostToggleService? = null
+    private lateinit var postToggleService: PostToggleService
 
     @Mock
-    private val likesRepository: LikesRepository? = null
+    private lateinit var likesRepository: LikesRepository
 
     @Mock
-    private val scrapRepository: ScrapRepository? = null
+    private lateinit var notificationService: NotificationService
 
     @Mock
-    private val postRepository: PostRepository? = null
+    private lateinit var scrapRepository: ScrapRepository
 
     @Mock
-    private val toggleMapper: ToggleMapper? = null
+    private lateinit var postRepository: PostRepository
 
     @Mock
-    private val followRepository: FollowRepository? = null
+    private lateinit var toggleMapper: ToggleMapper
 
     @Mock
-    private val memberRepository: MemberRepository? = null
+    private lateinit var followRepository: FollowRepository
+
+    @Mock
+    private lateinit var memberRepository: MemberRepository
 
     private val userId = 1L
     private val postId = 10L
@@ -56,36 +61,57 @@ internal class PostToggleServiceTest {
     @DisplayName("좋아요가 없는 경우 추가하고 상태 반환")
     fun toggleLikes_addLike() {
         // Given
-        Mockito.`when`(likesRepository!!.existsByPostIdAndMemberId(postId, userId)).thenReturn(false)
+        val mockPost = Post().apply { id = postId }
+        val mockMember = Member().apply { id = userId; nickname = "테스트유저" }
+        val mockAuthor = Member().apply { id = 2L }
+        mockPost.member = mockAuthor
+
+        Mockito.`when`(likesRepository.existsByPostIdAndMemberId(postId, userId)).thenReturn(false)
         Mockito.`when`(likesRepository.countByPostId(postId)).thenReturn(1)
-        Mockito.`when`(toggleMapper!!.toLikes(userId, postId)).thenReturn(Likes())
+        Mockito.`when`(toggleMapper.toLikes(userId, postId)).thenReturn(Likes())
+        Mockito.`when`(postRepository.findById(postId)).thenReturn(java.util.Optional.of(mockPost))
+        Mockito.`when`(memberRepository.findById(userId)).thenReturn(java.util.Optional.of(mockMember))
+        val mockNotification = NotificationEvent(
+                receiver = mockAuthor,
+                sender = mockMember,
+                type = com.project2.domain.notification.enums.NotificationType.NEW_LIKE,
+                content = "테스트유저님이 좋아요을 달았습니다.",
+                relatedId = postId
+        )
+        Mockito.doNothing().`when`(notificationService).processNotificationAsync(mockNotification)
 
         // When
-        val result = postToggleService!!.toggleLikes(userId, postId)
+        val result = postToggleService.toggleLikes(userId, postId)
 
         // Then
         Assertions.assertEquals("200", result.code)
         Assertions.assertEquals("좋아요 상태 변경 완료", result.msg)
         Assertions.assertTrue(result.data.liked)
-        Mockito.verify(likesRepository).save(ArgumentMatchers.any(Likes::class.java))
+        Mockito.verify(likesRepository).save(Mockito.any())
     }
 
     @Test
     @DisplayName("좋아요가 이미 있는 경우 삭제하고 상태 반환")
     fun toggleLikes_removeLike() {
         // Given
-        Mockito.`when`(likesRepository!!.existsByPostIdAndMemberId(postId, userId)).thenReturn(true)
+        val mockPost = Post().apply { id = postId }
+        val mockMember = Member().apply { id = userId; nickname = "테스트유저" }
+        mockPost.member = mockMember
+
+        Mockito.`when`(likesRepository.existsByPostIdAndMemberId(postId, userId)).thenReturn(true)
         Mockito.`when`(likesRepository.countByPostId(postId)).thenReturn(0)
+        Mockito.`when`(postRepository.findById(postId)).thenReturn(java.util.Optional.of(mockPost))
+        Mockito.`when`(memberRepository.findById(userId)).thenReturn(java.util.Optional.of(mockMember))
 
         // When
-        val result = postToggleService!!.toggleLikes(userId, postId)
+        val result = postToggleService.toggleLikes(userId, postId)
 
         // Then
         Assertions.assertEquals("200", result.code)
         Assertions.assertEquals("좋아요 상태 변경 완료", result.msg)
         Assertions.assertFalse(result.data.liked)
         Assertions.assertEquals(0, result.data.likeCount)
-        Mockito.verify(likesRepository, Mockito.never()).save(ArgumentMatchers.any(Likes::class.java))
+        Mockito.verify(likesRepository, Mockito.never()).save(Mockito.any())
     }
 
     @Test
@@ -94,14 +120,14 @@ internal class PostToggleServiceTest {
         // Given
         val mockPost = Post().apply { id = postId }
         val mockMember = Member().apply { id = userId }
-        Mockito.`when`(scrapRepository!!.existsByPostIdAndMemberId(postId, userId)).thenReturn(false)
-        Mockito.`when`(postRepository!!.getReferenceById(postId)).thenReturn(mockPost)
-        Mockito.`when`(toggleMapper!!.toScrap(userId, mockPost))
+        Mockito.`when`(scrapRepository.existsByPostIdAndMemberId(postId, userId)).thenReturn(false)
+        Mockito.`when`(postRepository.getReferenceById(postId)).thenReturn(mockPost)
+        Mockito.`when`(toggleMapper.toScrap(userId, mockPost))
                 .thenReturn(Scrap(post = mockPost, member = mockMember))
         Mockito.`when`(scrapRepository.countByPostId(postId)).thenReturn(1)
 
         // When
-        val result = postToggleService!!.toggleScrap(userId, postId)
+        val result = postToggleService.toggleScrap(userId, postId)
 
         // Then
         Assertions.assertEquals("200", result.code)
@@ -119,7 +145,7 @@ internal class PostToggleServiceTest {
         Mockito.`when`(scrapRepository.countByPostId(postId)).thenReturn(0)
 
         // When
-        val result = postToggleService!!.toggleScrap(userId, postId)
+        val result = postToggleService.toggleScrap(userId, postId)
 
         // Then
         Assertions.assertEquals("200", result.code)
@@ -133,13 +159,13 @@ internal class PostToggleServiceTest {
     @DisplayName("스크랩 추가 시 게시물이 존재하지 않으면 예외 발생")
     fun toggleScrap_postNotFound() {
         // Given
-        Mockito.`when`(scrapRepository!!.existsByPostIdAndMemberId(postId, userId)).thenReturn(false)
-        Mockito.`when`(postRepository!!.getReferenceById(postId)).thenThrow(EntityNotFoundException("게시물을 찾을 수 없습니다."))
+        Mockito.`when`(scrapRepository.existsByPostIdAndMemberId(postId, userId)).thenReturn(false)
+        Mockito.`when`(postRepository.getReferenceById(postId)).thenThrow(EntityNotFoundException("게시물을 찾을 수 없습니다."))
 
         // When & Then
         val exception = Assertions.assertThrows(
                 EntityNotFoundException::class.java
-        ) { postToggleService!!.toggleScrap(userId, postId) }
+        ) { postToggleService.toggleScrap(userId, postId) }
 
         Assertions.assertEquals("게시물을 찾을 수 없습니다.", exception.message)
     }
@@ -148,7 +174,7 @@ internal class PostToggleServiceTest {
     @DisplayName("좋아요 상태 조회 - 존재하는 경우")
     fun likeStatus_exists() {
         // Given
-        Mockito.`when`(likesRepository!!.getLikeStatus(postId, userId)).thenReturn(LikeResponseDTO(true, 5))
+        Mockito.`when`(likesRepository.getLikeStatus(postId, userId)).thenReturn(LikeResponseDTO(true, 5))
 
         // When
         val result = likesRepository.getLikeStatus(postId, userId)
@@ -162,7 +188,7 @@ internal class PostToggleServiceTest {
     @DisplayName("좋아요 상태 조회 - 존재하지 않는 경우")
     fun likeStatus_notExists() {
         // Given
-        Mockito.`when`(likesRepository!!.getLikeStatus(postId, userId)).thenReturn(LikeResponseDTO(false, 0))
+        Mockito.`when`(likesRepository.getLikeStatus(postId, userId)).thenReturn(LikeResponseDTO(false, 0))
 
         // When
         val result = likesRepository.getLikeStatus(postId, userId)
@@ -176,7 +202,7 @@ internal class PostToggleServiceTest {
     @DisplayName("스크랩 상태 조회 - 존재하는 경우")
     fun scrapStatus_exists() {
         // Given
-        Mockito.`when`(scrapRepository!!.getScrapStatus(postId, userId)).thenReturn(ScrapResponseDTO(true, 3))
+        Mockito.`when`(scrapRepository.getScrapStatus(postId, userId)).thenReturn(ScrapResponseDTO(true, 3))
 
         // When
         val result = scrapRepository.getScrapStatus(postId, userId)
@@ -190,7 +216,7 @@ internal class PostToggleServiceTest {
     @DisplayName("스크랩 상태 조회 - 존재하지 않는 경우")
     fun scrapStatus_notExists() {
         // Given
-        Mockito.`when`(scrapRepository!!.getScrapStatus(postId, userId)).thenReturn(ScrapResponseDTO(false, 0))
+        Mockito.`when`(scrapRepository.getScrapStatus(postId, userId)).thenReturn(ScrapResponseDTO(false, 0))
 
         // When
         val result = scrapRepository.getScrapStatus(postId, userId)
