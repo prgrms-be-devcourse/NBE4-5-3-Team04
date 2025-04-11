@@ -5,17 +5,16 @@ import com.project2.global.entity.BaseTime
 import jakarta.persistence.*
 
 @Entity
-class Likes : BaseTime() {
-
+class Scrap(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+    val id: Long? = null,
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    lateinit var post: Post
+    var post: Post,
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    lateinit var member: Member
-}
+    var member: Member
+) : BaseTime()
