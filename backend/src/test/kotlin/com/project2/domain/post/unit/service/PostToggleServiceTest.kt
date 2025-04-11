@@ -1,6 +1,8 @@
 package com.project2.domain.post.unit.service
 
 import com.project2.domain.member.entity.Member
+import com.project2.domain.member.repository.FollowRepository
+import com.project2.domain.member.repository.MemberRepository
 import com.project2.domain.post.dto.toggle.LikeResponseDTO
 import com.project2.domain.post.dto.toggle.ScrapResponseDTO
 import com.project2.domain.post.entity.Likes
@@ -10,8 +12,6 @@ import com.project2.domain.post.mapper.ToggleMapper
 import com.project2.domain.post.repository.LikesRepository
 import com.project2.domain.post.repository.PostRepository
 import com.project2.domain.post.repository.ScrapRepository
-import com.project2.domain.member.repository.FollowRepository
-import com.project2.domain.member.repository.MemberRepository
 import com.project2.domain.post.service.PostToggleService
 import jakarta.persistence.EntityNotFoundException
 import org.junit.jupiter.api.Assertions
@@ -97,7 +97,7 @@ internal class PostToggleServiceTest {
         Mockito.`when`(scrapRepository!!.existsByPostIdAndMemberId(postId, userId)).thenReturn(false)
         Mockito.`when`(postRepository!!.getReferenceById(postId)).thenReturn(mockPost)
         Mockito.`when`(toggleMapper!!.toScrap(userId, mockPost))
-            .thenReturn(Scrap(post = mockPost, member = mockMember))
+                .thenReturn(Scrap(post = mockPost, member = mockMember))
         Mockito.`when`(scrapRepository.countByPostId(postId)).thenReturn(1)
 
         // When
@@ -138,7 +138,7 @@ internal class PostToggleServiceTest {
 
         // When & Then
         val exception = Assertions.assertThrows(
-            EntityNotFoundException::class.java
+                EntityNotFoundException::class.java
         ) { postToggleService!!.toggleScrap(userId, postId) }
 
         Assertions.assertEquals("게시물을 찾을 수 없습니다.", exception.message)
