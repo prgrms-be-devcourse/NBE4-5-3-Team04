@@ -84,7 +84,7 @@ SNS 와 여행을 결합한 프로젝트 **Pathy**
 
 ### 🔗 기획서
 
-📜 [3차 프로젝트 기획서](https://www.notion.so/3-1c73550b7b55805aa206c397506b14da?p=1cf3550b7b5580e987c3ed821798be8f&pm=s)
+📜 [3차 프로젝트 기획서](https://www.notion.so/Java-to-Kotlin-1cf3550b7b5580e987c3ed821798be8f)
 
 ### 🔗 API 명세서
 
