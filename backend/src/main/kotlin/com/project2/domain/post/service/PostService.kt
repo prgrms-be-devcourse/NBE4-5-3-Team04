@@ -1,6 +1,11 @@
 package com.project2.domain.post.service
 
 import com.project2.domain.member.entity.Member
+import com.project2.domain.member.repository.FollowRepository
+import com.project2.domain.member.repository.MemberRepository
+import com.project2.domain.notification.enums.NotificationType
+import com.project2.domain.notification.event.NotificationEvent
+import com.project2.domain.notification.service.NotificationService
 import com.project2.domain.place.enums.Category
 import com.project2.domain.place.enums.Region
 import com.project2.domain.place.repository.PlaceRepository
@@ -25,12 +30,17 @@ class PostService(
         private val placeRepository: PlaceRepository,
         private val postImageService: PostImageService,
         private val placeService: PlaceService,
-        private val rq: Rq
+        private val rq: Rq,
+        private val followRepository: FollowRepository,
+        private val notificationService: NotificationService,
+        private val memberRepository: MemberRepository
 ) {
     @Transactional(rollbackFor = [Exception::class])
     @Throws(IOException::class)
     fun createPost(requestDTO: PostRequestDTO): Long {
         val actor = rq.getActor()
+        val member = memberRepository.findById(actor.id!!)
+                .orElseThrow { ServiceException("404", "회원 정보를 찾을 수 없습니다.") }
 
         val placeId = requestDTO.placeId!!
         val latitude = requestDTO.latitude!!
@@ -53,7 +63,7 @@ class PostService(
             id = null
             content = requestDTO.content
             title = requestDTO.title
-            member = actor
+            this.member = member
             images = mutableSetOf()
             likes = mutableSetOf()
             scraps = mutableSetOf()
@@ -66,6 +76,9 @@ class PostService(
         if (requestDTO.images.isNotEmpty()) {
             postImageService.saveImages(post, requestDTO.images)
         }
+
+        // 팔로워들에게 새 게시글 알림 전송
+        sendNewPostNotifications(member, createdPost)
 
         return createdPost.id!!
     }
@@ -144,5 +157,41 @@ class PostService(
 
     fun getPostByIdForEdit(postId: Long): Post {
         return postRepository.findByIdForEdit(postId) ?: throw IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
+    }
+
+    /**
+     * 팔로워들에게 새 게시글 알림 전송
+     */
+    private fun sendNewPostNotifications(author: Member, post: Post) {
+        try {
+            // 작성자 정보 확인 (닉네임 정보 확인)
+            println("작성자 닉네임: ${author.nickname}")
+
+            // 작성자를 팔로우하는 사용자들 가져오기 (EntityGraph 적용)
+            val followers = followRepository.findAllByFollowing(author)
+            println("팔로워 수: ${followers.size}")
+
+            // 각 팔로워에게 알림 전송
+            followers.forEach { follow ->
+                val follower = follow.follower!!
+
+                // 팔로워 정보 확인
+                println("팔로워 ID: ${follower.id}, 닉네임: ${follower.nickname}")
+
+                val event = NotificationEvent(
+                        receiver = follower,
+                        sender = author,
+                        type = NotificationType.NEW_POST,
+                        content = "${author.nickname}님이 새 게시글을 작성했습니다: ${post.title}",
+                        relatedId = post.id!! // 게시글 ID
+                )
+                // 비동기 처리를 위해 notificationService 사용
+                notificationService.processNotificationAsync(event)
+            }
+        } catch (e: Exception) {
+            // 알림 전송 실패 시 로그만 기록하고 계속 진행
+            println("새 게시글 알림 전송 실패: ${e.message}")
+            e.printStackTrace()
+        }
     }
 }

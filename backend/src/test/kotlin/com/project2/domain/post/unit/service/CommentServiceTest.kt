@@ -2,6 +2,7 @@ package com.project2.domain.post.unit.service
 
 import com.project2.domain.member.entity.Member
 import com.project2.domain.member.repository.MemberRepository
+import com.project2.domain.notification.service.NotificationService
 import com.project2.domain.post.dto.comment.CommentRequestDTO
 import com.project2.domain.post.dto.comment.CommentResponseDTO
 import com.project2.domain.post.entity.Comment
@@ -35,6 +36,9 @@ class CommentServiceTest {
 
     @Mock
     private lateinit var postRepository: PostRepository
+
+    @Mock
+    private lateinit var notificationService: NotificationService
 
     @Mock
     private lateinit var rq: Rq

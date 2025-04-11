@@ -74,7 +74,7 @@ class SecurityConfig(
     fun corsConfigurationSource(): UrlBasedCorsConfigurationSource {
         val configuration = CorsConfiguration().apply {
             allowedOrigins = listOf("https://cdpn.io", siteFrontUrl)
-            allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
+            allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH")
             allowCredentials = true
             allowedHeaders = listOf("*")
         }
