@@ -80,11 +80,11 @@ SNS 와 여행을 결합한 프로젝트 **Pathy**
 
 ### 🔗 ERD
 
-![ERD](https://github.com/user-attachments/assets/3fa78a26-706e-4af1-85ba-d2c884efd5fd)
+![image](https://github.com/user-attachments/assets/328f1577-5b53-4c7c-a393-cabb1a463174)
 
 ### 🔗 기획서
 
-📜 [기획서](https://www.notion.so/1a73550b7b55803fa23ad52c9928777e)
+📜 [3차 프로젝트 기획서](https://www.notion.so/Java-to-Kotlin-1cf3550b7b5580e987c3ed821798be8f)
 
 ### 🔗 API 명세서
 

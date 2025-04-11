@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component
 @Component
 class ToggleMapper {
 
-    fun toLikes(userId: Long, postId: Long): Likes {
-        val post = Post().apply { id = postId }
+    fun toLikes(userId: Long, post: Post): Likes {
         val member = Member().apply { id = userId }
         return Likes().apply {
             this.post = post
