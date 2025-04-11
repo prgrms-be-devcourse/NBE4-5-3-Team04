@@ -43,7 +43,16 @@ class ChatService(
     @Transactional(readOnly = true)
     fun getAllChatRooms(actorId: Long): List<ChatRoomResponseDTO> {
         return chatRoomRepository.findByMembers_IdOrderByLatestMessage(actorId)
-                .map { ChatRoomResponseDTO.from(it, actorId) }
+                .mapNotNull { chatRoom ->
+                    val opponent = chatRoom.members
+                            .filter { it.id != actorId }
+                            .singleOrNull() ?: return@mapNotNull null
+
+                    ChatRoomResponseDTO(
+                            id = chatRoom.id!!,
+                            opponent = opponent
+                    )
+                }
     }
 
     @Transactional(readOnly = true)
