@@ -1,6 +1,9 @@
 package com.project2.domain.post.unit.service
 
 import com.project2.domain.member.entity.Member
+import com.project2.domain.member.repository.FollowRepository
+import com.project2.domain.member.repository.MemberRepository
+import com.project2.domain.notification.service.NotificationService
 import com.project2.domain.place.entity.Place
 import com.project2.domain.place.enums.Category
 import com.project2.domain.place.enums.Region
@@ -37,6 +40,9 @@ class PostServiceTest {
     private lateinit var placeRepository: PlaceRepository
 
     @MockK
+    private lateinit var notificationService: NotificationService
+
+    @MockK
     private lateinit var postImageService: PostImageService
 
     @MockK
@@ -44,6 +50,12 @@ class PostServiceTest {
 
     @MockK
     private lateinit var rq: Rq
+
+    @MockK
+    private lateinit var followRepository: FollowRepository
+
+    @MockK
+    private lateinit var memberRepository: MemberRepository
 
     @InjectMockKs
     private lateinit var postService: PostService
@@ -82,6 +94,7 @@ class PostServiceTest {
         requestDTO.category = Category.CE7.name
 
         every { rq.getActor() } returns member
+        every { memberRepository.findById(1L) } returns Optional.of(member)
         every { placeRepository.findById(any()) } returns Optional.of(place)
         every { postRepository.save(any()) } returns Post().apply { id = 1L }
 

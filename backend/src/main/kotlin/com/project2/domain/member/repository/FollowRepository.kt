@@ -4,6 +4,7 @@ import com.project2.domain.member.entity.Follows
 import com.project2.domain.member.entity.Member
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.repository.EntityGraph
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.*
@@ -14,8 +15,7 @@ interface FollowRepository : JpaRepository<Follows, Long> {
 
     fun findByFollowing(following: Member, pageable: Pageable): Page<Follows>
 
-    fun findByFollowing(following: Member): List<Follows>
-
+    @EntityGraph(attributePaths = ["follower", "following"])
     fun findByFollower(follower: Member): List<Follows>
 
     fun countByFollower(follower: Member): Long
@@ -25,4 +25,7 @@ interface FollowRepository : JpaRepository<Follows, Long> {
     fun existsByFollowerAndFollowing(follower: Member, following: Member): Boolean
 
     fun deleteByFollowerAndFollowing(follower: Member, following: Member)
+
+    @EntityGraph(attributePaths = ["follower", "following"])
+    fun findAllByFollowing(following: Member): List<Follows>
 }

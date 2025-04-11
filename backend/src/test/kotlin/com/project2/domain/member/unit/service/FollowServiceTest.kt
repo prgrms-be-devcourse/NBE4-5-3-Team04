@@ -6,13 +6,13 @@ import com.project2.domain.member.entity.Member
 import com.project2.domain.member.repository.FollowRepository
 import com.project2.domain.member.repository.MemberRepository
 import com.project2.domain.member.service.FollowService
+import com.project2.domain.notification.service.NotificationService
 import com.project2.global.security.Rq
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -27,6 +27,9 @@ class FollowServiceTest {
 
     @Mock
     private lateinit var memberRepository: MemberRepository
+
+    @Mock
+    private lateinit var notificationService: NotificationService
 
     @Mock
     private lateinit var rq: Rq
@@ -59,15 +62,11 @@ class FollowServiceTest {
     fun testToggleFollow_Success_Follow() {
         // given
         Mockito.`when`(rq.getActor()).thenReturn(follower)
-        Mockito.`when`(
-                following.id?.let {
-                    memberRepository.findById(
-                            it
-                    )
-                }).thenReturn(Optional.of(following)) // following.getId() 사용
-//        Mockito.`when`(followRepository!!.findByFollowerAndFollowing(follower, following)).thenReturn(Optional.empty())
+        Mockito.`when`(memberRepository.findById(1L)).thenReturn(Optional.of(follower))
+        Mockito.`when`(memberRepository.findById(2L)).thenReturn(Optional.of(following))
+        Mockito.`when`(followRepository.findByFollowerAndFollowing(follower, following)).thenReturn(Optional.empty())
         val savedFollow = Follows(1L, follower, following)
-        Mockito.`when`(followRepository.save(ArgumentMatchers.any(Follows::class.java))).thenReturn(savedFollow)
+        Mockito.`when`(followRepository.save(Mockito.any())).thenReturn(savedFollow)
 
         // when
         val response = followService.toggleFollow(requestDto)
@@ -88,12 +87,8 @@ class FollowServiceTest {
         requestDto.followingId = following.id!!
 
         //   - 팔로잉 설정 (memberRepository.findById() 스텁)
-        Mockito.`when`(
-                following.id?.let {
-                    memberRepository.findById(
-                            it
-                    )
-                }).thenReturn(Optional.of(following))
+        Mockito.`when`(memberRepository.findById(1L)).thenReturn(Optional.of(follower))
+        Mockito.`when`(memberRepository.findById(2L)).thenReturn(Optional.of(following))
 
         //   - 팔로우 관계가 이미 존재하는 경우 설정
         val existingFollow = Follows(1L, follower, following)
@@ -109,6 +104,6 @@ class FollowServiceTest {
         org.assertj.core.api.Assertions.assertThat(response.code).isEqualTo("204")
 
         //   - followRepository.delete() 메서드가 호출되었는지 확인
-        Mockito.verify(followRepository)?.delete(existingFollow)
+        Mockito.verify(followRepository).delete(existingFollow)
     }
 }

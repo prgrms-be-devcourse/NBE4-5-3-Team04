@@ -22,6 +22,8 @@ import {
   LogOut,
   ChevronDown,
 } from "lucide-react";
+import { NotificationProvider } from "@/contexts/NotificationContext";
+import NotificationDropdown from "@/components/notification/NotificationDropdown";
 
 export default function ClientLayout({
   children,
@@ -137,7 +139,9 @@ export default function ClientLayout({
 
   if (isLoginPage) {
     return (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <NotificationProvider>{children}</NotificationProvider>
+      </QueryClientProvider>
     );
   }
 
@@ -186,7 +190,8 @@ export default function ClientLayout({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200">
+      <NotificationProvider>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200">
         {/* 헤더 */}
         <header className="bg-white shadow-sm flex justify-between items-center px-4 h-14 fixed top-0 left-0 w-full z-50">
           <div className="flex items-center">
@@ -215,19 +220,24 @@ export default function ClientLayout({
           </div>
 
           {/* 사용자 메뉴 */}
-          <div className="relative" ref={profileDropdownRef}>
-            {isLogin ? (
-              <div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setProfileDropdownOpen(!profileDropdownOpen);
-                  }}
-                  className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 focus:outline-none"
-                >
-                  <span className="hidden md:inline">내 프로필</span>
-                  <ChevronDown className="w-4 h-4" />
-                </button>
+          <div className="flex items-center space-x-4">
+            {/* 알림 드롭다운 */}
+            {isLogin && <NotificationDropdown />}
+            
+            {/* 프로필 드롭다운 */}
+            <div className="relative" ref={profileDropdownRef}>
+              {isLogin ? (
+                <div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setProfileDropdownOpen(!profileDropdownOpen);
+                    }}
+                    className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 focus:outline-none"
+                  >
+                    <span className="hidden md:inline">내 프로필</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
 
                 {/* 드롭다운 */}
                 {profileDropdownOpen && (
@@ -253,15 +263,16 @@ export default function ClientLayout({
                     </Link>
                   </div>
                 )}
-              </div>
-            ) : (
-              <Link
-                href="/member/login"
-                className="text-blue-600 hover:text-blue-800 font-medium"
-              >
-                로그인
-              </Link>
-            )}
+                </div>
+              ) : (
+                <Link
+                  href="/member/login"
+                  className="text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  로그인
+                </Link>
+              )}
+            </div>
           </div>
         </header>
 
@@ -307,7 +318,8 @@ export default function ClientLayout({
           {/* 메인 컨텐츠 */}
           <main className="flex-1 p-3 pb-16">{children}</main>
         </div>
-      </div>
+        </div>
+      </NotificationProvider>
     </QueryClientProvider>
   );
 }
