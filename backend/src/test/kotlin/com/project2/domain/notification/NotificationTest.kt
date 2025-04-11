@@ -7,11 +7,15 @@ import com.project2.domain.member.repository.MemberRepository
 import com.project2.domain.notification.repository.NotificationRepository
 import com.project2.domain.post.dto.PostRequestDTO
 import com.project2.domain.post.dto.comment.CommentRequestDTO
+import com.project2.domain.post.dto.toggle.LikeResponseDTO
 import com.project2.domain.post.entity.Comment
+import com.project2.domain.post.entity.Likes
 import com.project2.domain.post.entity.Post
+import com.project2.domain.post.repository.LikesRepository
 import com.project2.domain.post.repository.PostRepository
 import com.project2.domain.post.service.CommentService
 import com.project2.domain.post.service.PostService
+import com.project2.domain.post.service.PostToggleService
 import com.project2.global.dto.RsData
 import com.project2.global.security.Rq
 import io.mockk.every
@@ -28,9 +32,12 @@ class NotificationTest {
     private val postRepository = mockk<PostRepository>()
     private val notificationRepository = mockk<NotificationRepository>()
     private val commentService = mockk<CommentService>()
+    private val postToggleService = mockk<PostToggleService>()
+
     private val followRepository = mockk<FollowRepository>()
-    private val rq = mockk<Rq>()
+    private val likesRepository = mockk<LikesRepository>()
     private val postService = mockk<PostService>()
+    private val rq = mockk<Rq>()
 
     private lateinit var postAuthor: Member
     private lateinit var commenter: Member
@@ -155,26 +162,31 @@ class NotificationTest {
         verify { postService.createPost(any()) }
     }
 
-//    @Test
-//    fun testNotificationCreatedWhenPostIsLiked() {
-//        // Given
-//        val like = Likes().apply {
-//            id = 1L
-//            member = follower
-//            post = this@NotificationTest.post
-//        }
-//
-//        // 좋아요 컨트롤러 모의 설정
-//        val likeController = mockk<com.project2.domain.post.controller.LikeController>(relaxed = true)
-//        every { likesRepository.existsByPostIdAndMemberId(any(), any()) } returns false
-//        every { likesRepository.save(any()) } returns like
-//        every { likesRepository.countByPostId(any()) } returns 1
-//
-//        // When - 좋아요 컨트롤러 호출
-//        likeController.toggleLike(post.id!!)
-//
-//        // Then
-//        // 좋아요 컨트롤러가 호출되었는지 확인
-//        verify { likeController.toggleLike(any()) }
-//    }
+    @Test
+    fun testNotificationCreatedWhenPostIsLiked() {
+        // Given
+        val like = Likes().apply {
+            id = 1L
+            // 임의로 member 를 follower 변수로 사용 꼭 follower 아니여도 됨
+            member = follower
+            post = this@NotificationTest.post
+        }
+
+        // 좋아요 서비스 모의 설정
+        every { likesRepository.existsByPostIdAndMemberId(any(), any()) } returns false
+        every { likesRepository.save(any()) } returns like
+        every { likesRepository.countByPostId(any()) } returns 1
+        every { memberRepository.findById(any()) } returns Optional.of(follower)
+        every { postRepository.findById(any()) } returns Optional.of(post)
+        every { postToggleService.toggleLikes(any(), any()) } returns RsData(
+                "200", "좋아요 상태 변경 완료", LikeResponseDTO(true, 1)
+        )
+
+        // When - PostToggleService 호출
+        postToggleService.toggleLikes(follower.id!!, post.id!!)
+
+        // Then
+        // PostToggleService가 호출되었는지 확인
+        verify { postToggleService.toggleLikes(follower.id!!, post.id!!) }
+    }
 }
