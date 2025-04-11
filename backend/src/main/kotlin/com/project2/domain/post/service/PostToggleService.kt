@@ -12,8 +12,10 @@ import com.project2.domain.post.repository.LikesRepository
 import com.project2.domain.post.repository.PostRepository
 import com.project2.domain.post.repository.ScrapRepository
 import com.project2.global.dto.RsData
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.server.ResponseStatusException
 
 @Service
 class PostToggleService(
@@ -26,12 +28,16 @@ class PostToggleService(
 ) {
     @Transactional
     fun toggleLikes(userId: Long, postId: Long): RsData<LikeResponseDTO> {
+        val post = postRepository.findById(postId).orElseThrow {
+            ResponseStatusException(HttpStatus.NOT_FOUND, "게시물을 찾을 수 없습니다.")
+        }
+
         val isLiked = likesRepository.existsByPostIdAndMemberId(postId, userId)
 
         if (isLiked) {
             likesRepository.toggleLikeIfExists(postId, userId)
         } else {
-            likesRepository.save(toggleMapper.toLikes(userId, postId))
+            likesRepository.save(toggleMapper.toLikes(userId, post))
         }
 
         val responseDTO = LikeResponseDTO(!isLiked, likesRepository.countByPostId(postId))

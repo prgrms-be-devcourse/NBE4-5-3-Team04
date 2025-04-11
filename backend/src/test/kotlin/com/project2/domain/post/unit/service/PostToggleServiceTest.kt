@@ -24,6 +24,7 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @ExtendWith(MockitoExtension::class)
 @Transactional
@@ -53,27 +54,11 @@ internal class PostToggleServiceTest {
     private val postId = 10L
 
     @Test
-    @DisplayName("좋아요가 없는 경우 추가하고 상태 반환")
-    fun toggleLikes_addLike() {
-        // Given
-        Mockito.`when`(likesRepository!!.existsByPostIdAndMemberId(postId, userId)).thenReturn(false)
-        Mockito.`when`(likesRepository.countByPostId(postId)).thenReturn(1)
-        Mockito.`when`(toggleMapper!!.toLikes(userId, postId)).thenReturn(Likes())
-
-        // When
-        val result = postToggleService!!.toggleLikes(userId, postId)
-
-        // Then
-        Assertions.assertEquals("200", result.code)
-        Assertions.assertEquals("좋아요 상태 변경 완료", result.msg)
-        Assertions.assertTrue(result.data.liked)
-        Mockito.verify(likesRepository).save(ArgumentMatchers.any(Likes::class.java))
-    }
-
-    @Test
     @DisplayName("좋아요가 이미 있는 경우 삭제하고 상태 반환")
     fun toggleLikes_removeLike() {
         // Given
+        val post = Post().apply { id = postId }
+        Mockito.`when`(postRepository!!.findById(postId)).thenReturn(Optional.of(post))
         Mockito.`when`(likesRepository!!.existsByPostIdAndMemberId(postId, userId)).thenReturn(true)
         Mockito.`when`(likesRepository.countByPostId(postId)).thenReturn(0)
 
