@@ -103,6 +103,7 @@ class LikesIntegrationTest @Autowired constructor(
         }
     }
 
+//    TODO: 존재하지 않는 게시물에 대한 예외 응답 처리 필요
 //    @Test
 //    @DisplayName("존재하지 않는 게시물(삭제된 게시물)에 좋아요 요청 시 404 반환")
 //    fun t4() {
