@@ -5,9 +5,6 @@ import com.project2.domain.member.dto.FollowResponseDto
 import com.project2.domain.member.entity.Follows
 import com.project2.domain.member.repository.FollowRepository
 import com.project2.domain.member.repository.MemberRepository
-import com.project2.domain.notification.enums.NotificationType
-import com.project2.domain.notification.event.NotificationEvent
-import com.project2.domain.notification.service.NotificationService
 import com.project2.domain.post.dto.toggle.LikeResponseDTO
 import com.project2.domain.post.dto.toggle.ScrapResponseDTO
 import com.project2.domain.post.mapper.ToggleMapper
@@ -15,39 +12,32 @@ import com.project2.domain.post.repository.LikesRepository
 import com.project2.domain.post.repository.PostRepository
 import com.project2.domain.post.repository.ScrapRepository
 import com.project2.global.dto.RsData
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.server.ResponseStatusException
 
 @Service
 class PostToggleService(
-        private val likesRepository: LikesRepository,
-        private val scrapRepository: ScrapRepository,
-        private val postRepository: PostRepository,
-        private val toggleMapper: ToggleMapper,
-        private val followRepository: FollowRepository,
-        private val memberRepository: MemberRepository,
-        private val notificationService: NotificationService
+    private val likesRepository: LikesRepository,
+    private val scrapRepository: ScrapRepository,
+    private val postRepository: PostRepository,
+    private val toggleMapper: ToggleMapper,
+    private val followRepository: FollowRepository,
+    private val memberRepository: MemberRepository
 ) {
     @Transactional
     fun toggleLikes(userId: Long, postId: Long): RsData<LikeResponseDTO> {
+        val post = postRepository.findById(postId).orElseThrow {
+            ResponseStatusException(HttpStatus.NOT_FOUND, "게시물을 찾을 수 없습니다.")
+        }
+
         val isLiked = likesRepository.existsByPostIdAndMemberId(postId, userId)
-        val post = postRepository.findById(postId).orElseThrow()
-        val actor = memberRepository.findById(userId).orElseThrow()
 
         if (isLiked) {
             likesRepository.toggleLikeIfExists(postId, userId)
         } else {
-            likesRepository.save(toggleMapper.toLikes(userId, postId))
-            if (post.member.id != actor.id) {
-                val notification = NotificationEvent(
-                        receiver = post.member,
-                        sender = actor,
-                        type = NotificationType.NEW_LIKE,
-                        content = "${actor.nickname}님이 좋아요을 달았습니다.",
-                        relatedId = post.id!!
-                )
-                notificationService.processNotificationAsync(notification)
-            }
+            likesRepository.save(toggleMapper.toLikes(userId, post))
         }
 
         val responseDTO = LikeResponseDTO(!isLiked, likesRepository.countByPostId(postId))
@@ -76,12 +66,12 @@ class PostToggleService(
 
         val follower = memberRepository.findById(followerId).orElseThrow { IllegalArgumentException("팔로워를 찾을 수 없습니다.") }
         val following =
-                memberRepository.findById(followingId).orElseThrow { IllegalArgumentException("팔로잉 사용자를 찾을 수 없습니다.") }
+            memberRepository.findById(followingId).orElseThrow { IllegalArgumentException("팔로잉 사용자를 찾을 수 없습니다.") }
 
         val isFollowing = followRepository.existsByFollowerAndFollowing(follower, following)
 
         val follows = Follows(
-                id = null, follower = follower, following = following
+            id = null, follower = follower, following = following
         )
 
         if (isFollowing) {

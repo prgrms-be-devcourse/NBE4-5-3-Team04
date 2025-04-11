@@ -103,21 +103,18 @@ class LikesIntegrationTest @Autowired constructor(
         }
     }
 
-//    TODO: 존재하지 않는 게시물에 대한 예외 응답 처리 필요
-//    @Test
-//    @DisplayName("존재하지 않는 게시물(삭제된 게시물)에 좋아요 요청 시 404 반환")
-//    fun t4() {
-//        val nonExistentPostId = 99999L
-//
-//        mockMvc.post("/api/posts/$nonExistentPostId/likes") {
-//            contentType = MediaType.APPLICATION_JSON
-//            header("user", member.id!!)
-//        }.andExpect {
-//            status { isNotFound() }
-//            jsonPath("$.code") { value("404") }
-//            jsonPath("$.msg") { value("게시물을 찾을 수 없습니다.") }
-//        }
-//    }
+    @Test
+    @DisplayName("존재하지 않는 게시물(삭제된 게시물)에 좋아요 요청 시 404 반환")
+    fun t4() {
+        val nonExistentPostId = 99999L
+
+        mockMvc.post("/api/posts/$nonExistentPostId/likes") {
+            contentType = MediaType.APPLICATION_JSON
+            header("user", member.id!!)
+        }.andExpect {
+            status { isNotFound() }
+        }
+    }
 
     @Test
     @DisplayName("사용자별 좋아요 상태가 분리되는지 검증")
