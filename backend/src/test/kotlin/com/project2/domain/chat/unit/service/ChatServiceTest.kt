@@ -1,9 +1,10 @@
-package com.project2.domain.chat.service
+package com.project2.domain.chat.unit.service
 
 import com.project2.domain.chat.entity.ChatMessage
 import com.project2.domain.chat.entity.ChatRoom
 import com.project2.domain.chat.repository.ChatMessageRepository
 import com.project2.domain.chat.repository.ChatRoomRepository
+import com.project2.domain.chat.service.ChatService
 import com.project2.domain.member.entity.Member
 import com.project2.domain.member.repository.MemberRepository
 import io.mockk.every
