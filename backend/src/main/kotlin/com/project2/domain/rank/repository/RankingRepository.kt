@@ -22,7 +22,7 @@ interface RankingRepository : JpaRepository<Post, Long> {
             pl.id, pl.name, pl.region,
             COUNT(DISTINCT l.id),
             COUNT(DISTINCT s.id),
-            COUNT(p.id)
+            COUNT(DISTINCT p.id)
         )
         FROM Post p
         JOIN p.place pl
@@ -46,7 +46,7 @@ interface RankingRepository : JpaRepository<Post, Long> {
             pl.region,
             COUNT(DISTINCT l.id),
             COUNT(DISTINCT s.id),
-            COUNT(p.id)
+            COUNT(DISTINCT p.id)
         )
         FROM Post p
         JOIN p.place pl
