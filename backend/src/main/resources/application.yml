@@ -2,7 +2,7 @@ server:
   port: 8080
 
 spring:
-  application.name: project2
+  application.name: project3
   output.ansi.enabled: always
   profiles.active: dev
   servlet:
