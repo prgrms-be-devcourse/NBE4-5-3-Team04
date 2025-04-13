@@ -41,7 +41,7 @@ jobs:
             sleep 30
 
             tmux send-keys "cd ${REPO_DIR}/backend" C-m
-            tmux send-keys "java -Xms256m -Xmx512m -jar build/libs/project2-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &" C-m
+            tmux send-keys "java -Xms256m -Xmx512m -jar build/libs/project3-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &" C-m
             sleep 30
 
             # ========================

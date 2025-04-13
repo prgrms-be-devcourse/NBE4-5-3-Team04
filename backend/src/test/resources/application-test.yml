@@ -2,7 +2,7 @@ server:
   port: 8080
 
 spring:
-  application.name: project2
+  application.name: project3
   output.ansi.enabled: always
   servlet:
     multipart:
@@ -11,7 +11,7 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:h2:file:./db_project2;MODE=MySQL
+    url: jdbc:h2:file:./db_project3;MODE=MySQL
     username: sa
     password:
     driver-class-name: org.h2.Driver
