@@ -2,15 +2,6 @@
 
 프로그래머스 백엔드 데브코스 4기 5회차 4팀 zi존백엔드 3차 팀 프로젝트입니다.
 
-## zi존백엔드
-
-|                **정성철**                 |                   **강을찬**                   |                   **소진영**                   |                 **이현지**                  |                 **정준호**                  |
-| :---------------------------------------: | :--------------------------------------------: | :--------------------------------------------: | :-----------------------------------------: | :-----------------------------------------: |
-| ![정성철](https://github.com/jsc5023.png) | ![강을찬](https://github.com/TheGreatKang.png) | ![소진영](https://github.com/Jinyoung0718.png) | ![이현지](https://github.com/cloudmato.png) | ![정준호](https://github.com/junho1131.png) |
-|                 **PM/TL**                 |                     **TM**                     |                     **TM**                     |                   **TM**                    |                   **TM**                    |
-|   [GitHub](https://github.com/jsc5023)    |   [GitHub](https://github.com/TheGreatKang)    |   [GitHub](https://github.com/Jinyoung0718)    |   [GitHub](https://github.com/cloudmato)    |   [GitHub](https://github.com/junho1131)    |
-
----
 
 ### 1. 프로젝트 명
 
